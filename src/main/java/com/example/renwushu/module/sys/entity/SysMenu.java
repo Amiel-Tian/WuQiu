@@ -1,10 +1,14 @@
 package com.example.renwushu.module.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -27,10 +31,10 @@ public class SysMenu implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")
-    private Integer parentId;
+    private Long parentId;
 
     @ApiModelProperty("菜单名称")
     private String name;
@@ -58,5 +62,7 @@ public class SysMenu implements Serializable {
     @ApiModelProperty("状态1可用|0不可用")
     private Integer statu;
 
+    @TableField(exist = false)
+    private List<SysMenu> children = new ArrayList<>();
 
 }

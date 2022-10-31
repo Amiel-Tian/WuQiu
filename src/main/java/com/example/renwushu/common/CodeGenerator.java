@@ -56,7 +56,7 @@ public class CodeGenerator {
                             .formatServiceFileName("%sService"); // //去掉Service接口的首字母I
                 })
                 .templateConfig(builder -> {
-                    builder.disable(TemplateType.CONTROLLER); // 设置禁止生成controller
+//                    builder.disable(TemplateType.CONTROLLER); // 设置禁止生成controller
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();

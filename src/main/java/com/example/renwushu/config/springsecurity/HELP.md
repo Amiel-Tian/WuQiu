@@ -13,7 +13,7 @@
   * 退出登录接口使用到的配置
     * `.logoutSuccessHandler()` 请求`/loginout`接口后会进入此方法
   * 其他配置
-  * Security内置的权限注解：直接加载 `controller`方法上`@PreAuthorize("hasRole('admin')")`
+  * Security内置的权限注解：直接加载 `controller`方法上`@PreAuthorize("hasRole('admin')")/@PreAuthorize("hasAuthority('sys:user:save')")`
     * `@PreAuthorize`：方法执行前进行权限检查
     * `@PostAuthorize`：方法执行后进行权限检查
   

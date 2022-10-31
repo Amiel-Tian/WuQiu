@@ -2,6 +2,9 @@ package com.example.renwushu.module.sys.service;
 
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysMenuService extends IService<SysMenu> {
 
+    List<SysMenuDto> getcurrentUserNav();
 }

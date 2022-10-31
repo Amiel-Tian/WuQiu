@@ -31,10 +31,10 @@ public class KaptchaConfig {
         properties.put("kaptcha.background-color.to", "white");
         /*验证码内容间隔*/
         properties.put("kaptcha.textproducer.char.space", "4");
+        /*验证码长度*/
+        properties.put("kaptcha.textproducer.char.length", "4");
         /*验证码内容源*/
         properties.put("kaptcha.content.source", "ABCDEFGHIJKLMNOPQRSTUVWXYZ2345678923456789");
-        /*验证码长度*/
-        properties.put("kaptcha.content.length", "4");
         Config config = new Config(properties);
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         defaultKaptcha.setConfig(config);
