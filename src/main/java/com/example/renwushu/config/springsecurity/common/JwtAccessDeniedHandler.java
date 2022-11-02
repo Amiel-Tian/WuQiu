@@ -20,7 +20,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException {
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setHeader("Content-Type", "application/json");
-        httpServletResponse.getWriter().write(JSON.toJSONString(AjaxJson.returnExceptionInfo(StatusCode.CAS_AUTHENTICATION_FAIL)));
+        httpServletResponse.getWriter().write(JSON.toJSONString(AjaxJson.returnExceptionInfo(StatusCode.AUTHENTICATION_FAIL)));
     }
 
 }

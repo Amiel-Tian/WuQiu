@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
 
         try {
             SysUser user = sysUserService.getByUser(new SysUser()
-                    .setUsername(username));
+                    .setLoginname(username));
 
             if (user == null){
                 return null;
@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
             //获取用户权限信息，如果没有用户信息直接返回
             List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(sysUserService.getAuthorityByUser(user.getId()));
 
-            UserDetails userDetails = new User(user.getUsername(),user.getPassword(),grantedAuthorities);
+            UserDetails userDetails = new User(user.getLoginname(),user.getPassword(),grantedAuthorities);
             return userDetails;
 
         }catch (Exception e){

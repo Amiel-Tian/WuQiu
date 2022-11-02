@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `loginname` varchar(64) DEFAULT NULL COMMENT '登录名',
   `password` varchar(64) DEFAULT NULL COMMENT '用户密码',
   `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像',
   `email` varchar(64) DEFAULT NULL COMMENT '用户邮箱',

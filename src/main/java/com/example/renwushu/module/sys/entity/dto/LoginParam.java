@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LoginParam {
-    String username;
+    String loginname;
     String password;
     String token;
     String captcha;

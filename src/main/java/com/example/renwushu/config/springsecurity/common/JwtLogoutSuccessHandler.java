@@ -2,6 +2,7 @@ package com.example.renwushu.config.springsecurity.common;
 
 import cn.hutool.json.JSONUtil;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.utils.JwtUtil;
 import com.sun.xml.txw2.output.ResultFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,7 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
         ServletOutputStream outputStream = response.getOutputStream();
         response.setHeader(jwtUtil.getHeader(), "");
 
-
-        outputStream.write(JSONUtil.toJsonStr(new AjaxJson<>()).getBytes("UTF-8"));
+        outputStream.write(JSONUtil.toJsonStr(AjaxJson.returnInfo(StatusCode.USER_LOGINOUT_SUCESS, true)).getBytes("UTF-8"));
 
         outputStream.flush();
         outputStream.close();

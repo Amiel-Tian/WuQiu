@@ -6,6 +6,7 @@ import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.config.springsecurity.service.UserService;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.dto.LoginParam;
+import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.JwtUtil;
 import com.example.renwushu.utils.KaptchaUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Map;
 
 @Slf4j
@@ -28,6 +30,8 @@ import java.util.Map;
 public class AuthController extends BaseController {
     @Autowired
     private KaptchaUtil kaptchaUtil;
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 图片验证码
@@ -54,13 +58,11 @@ public class AuthController extends BaseController {
         /*springSecurity框架自带退出登录login，此处仅为swagger显示使用*/
     }
 
-    @ResponseBody
-    @GetMapping("/list")
-    public AjaxJson list(){
-        AjaxJson ajaxJson = new AjaxJson();
+    @GetMapping("/getUserInfo")
+    public SysUser getUserInfo(Principal principal) {
+        String username = principal.getName();
+        SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
 
-        ajaxJson.setData("成功访问");
-
-        return ajaxJson;
+        return sysUser;
     }
 }

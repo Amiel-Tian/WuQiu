@@ -39,7 +39,7 @@ public class SysMenuController {
     @ResponseBody
     public AjaxJson nav(Principal principal) {
         String username = principal.getName();
-        SysUser sysUser = sysUserService.getByUser(new SysUser().setUsername(username));
+        SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
         // ROLE_Admin,sys:user:save
         String[] authoritys = StringUtils.tokenizeToStringArray(sysUserService.getAuthorityByUser(sysUser.getId()), ",");
         return new AjaxJson().setData(MapUtil.builder().put("nav", sysMenuService.getcurrentUserNav()).put("authoritys", authoritys).map());

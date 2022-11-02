@@ -34,7 +34,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenuDto> getcurrentUserNav() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        SysUser sysUser = sysUserService.getByUser(new SysUser().setUsername(username));
+        SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
         // 获取用户的所有菜单
         List<Long> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
         List<SysMenu> menus = buildTreeMenu(this.listByIds(menuIds));
@@ -74,6 +74,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             dto.setComponent(m.getComponent());
             dto.setIcon(m.getIcon());
             dto.setPath(m.getPath());
+            dto.setType(m.getType());
             if (m.getChildren().size() > 0) {
                 dto.setChildren(convert(m.getChildren()));
             }
