@@ -41,6 +41,7 @@ public class AuthController extends BaseController {
     public AjaxJson captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         AjaxJson ajaxJson = new AjaxJson<>();
 
+
         Map captcha = kaptchaUtil.getCaptcha();
 
         ajaxJson.setData(captcha);
