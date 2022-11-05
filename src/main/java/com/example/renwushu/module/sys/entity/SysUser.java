@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.example.renwushu.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,7 +27,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("sys_user")
 @ApiModel(value = "SysUser对象", description = "")
-public class SysUser implements Serializable {
+public class SysUser  extends BaseEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
