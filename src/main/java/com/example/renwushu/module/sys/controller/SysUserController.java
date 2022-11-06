@@ -6,18 +6,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
+import com.example.renwushu.module.sys.entity.SysUserRole;
+import com.example.renwushu.module.sys.service.SysRoleService;
+import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
+import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -33,13 +41,22 @@ import java.util.Map;
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     @ApiOperation(value = "新增", notes = "新增")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxJson save(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
 //        param.setCreateBy();
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        param.setId(IdHelp.UUID());
+        param.setStatu(QueryField.STATU_NOR_);
+        if (StringUtils.isNotBlank(param.getPassword())) {
+            param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        }
 
         boolean result = sysUserService.save(param);
         if (result){
@@ -55,14 +72,31 @@ public class SysUserController {
     public AjaxJson update(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
 
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (StringUtils.isNotBlank(param.getPassword())) {
+            param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        }
+        if (!ListUtils.isEmpty(param.getRoleIdList() )){
+            LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<SysUserRole>();
+            queryWrapper.eq(SysUserRole::getUserId, param.getId());
+            sysUserRoleService.remove(queryWrapper);
+
+            for (String s : param.getRoleIdList()) {
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setId(IdHelp.UUID());
+                sysUserRole.setUserId(param.getId());
+                sysUserRole.setRoleId(s);
+                sysUserRoleService.save(sysUserRole);
+            }
+        }
         boolean result = sysUserService.updateById(param);
         if (result){
-
+            sysUserService.clearUserAuthorityInfo(param.getLoginname());
         }
         ajaxJson.setData(result);
         return ajaxJson;
     }
-    @ApiOperation(value = "修改", notes = "修改")
+    @ApiOperation(value = "逻辑删除", notes = "逻辑删除")
     @RequestMapping(value = "/delete", method = RequestMethod.PUT)
     public AjaxJson delete(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
@@ -80,11 +114,20 @@ public class SysUserController {
     public AjaxJson getById(String id) {
         AjaxJson ajaxJson = new AjaxJson();
         SysUser result = sysUserService.getById(id);
+
+        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<SysUserRole>();
+        queryWrapper.eq(SysUserRole::getUserId, id);
+        List<SysUserRole> list = sysUserRoleService.list(queryWrapper);
+        if (!ListUtils.isEmpty(list)){
+            result.setRoleIdList(list.stream().map(SysUserRole::getRoleId).collect(Collectors.toList()));
+        }
+
+
         ajaxJson.setData(result);
         return ajaxJson;
     }
     @ApiOperation(value = "列表", notes = "列表")
-    @RequestMapping(value = "/dates", method = RequestMethod.GET)
+    @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
         LambdaQueryWrapper<SysUser> queryWrapper = createQueryWrapper(param);
@@ -92,7 +135,7 @@ public class SysUserController {
         ajaxJson.setData(result);
         return ajaxJson;
     }
-    @ApiOperation(value = "列表", notes = "列表")
+    @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
     public AjaxJson page(SysUser sysUser){
         AjaxJson ajaxJson = new AjaxJson();

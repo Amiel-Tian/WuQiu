@@ -15,14 +15,14 @@ public interface SysUserService extends IService<SysUser> {
     public SysUser getByUser(SysUser sysUser);
 
 
-    String getAuthorityByUser(Long userId);
+    String getAuthorityByUser(String userId);
 
     // 删除某个用户的权限信息
-    void clearUserAuthorityInfo(String username);
+    void clearUserAuthorityInfo(String loginname);
 
     // 删除所有与该角色关联的用户的权限信息
-    void clearUserAuthorityInfoByRoleId(Long roleId);
+    void clearUserAuthorityInfoByRoleId(String roleId);
 
     // 删除所有与该菜单关联的所有用户的权限信息
-    void clearUserAuthorityInfoByMenuId(Long menuId);
+    void clearUserAuthorityInfoByMenuId(String menuId);
 }

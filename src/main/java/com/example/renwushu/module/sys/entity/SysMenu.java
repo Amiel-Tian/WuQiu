@@ -1,14 +1,14 @@
 package com.example.renwushu.module.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.renwushu.common.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -26,15 +26,15 @@ import lombok.Setter;
 @Setter
 @TableName("sys_menu")
 @ApiModel(value = "SysMenu对象", description = "")
-public class SysMenu implements Serializable {
+public class SysMenu extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "id")
+    private String id;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty("菜单名称")
     private String name;
@@ -61,6 +61,8 @@ public class SysMenu implements Serializable {
 
     @ApiModelProperty("状态1可用|0不可用")
     private Integer statu;
+    @ApiModelProperty("排序")
+    private Integer sort;
 
     @TableField(exist = false)
     private List<SysMenu> children = new ArrayList<>();
