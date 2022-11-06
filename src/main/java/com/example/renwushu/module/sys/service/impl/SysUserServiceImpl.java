@@ -58,21 +58,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public String getAuthorityByUser(Long userId) {
+    public String getAuthorityByUser(String userId) {
         SysUser sysUser = getById(userId);
         String authority = null;
         if (redisUtil.hasKey("GrantedAuthority:" + sysUser.getLoginname())) {
 //         优先从缓存获
             authority = (String) redisUtil.get("GrantedAuthority:" + sysUser.getLoginname());
         } else {
-        List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where user_id = " + userId));
-        List<Long> menuIds = sysUserMapper.getNavMenuIds(userId);
-        List<SysMenu> menus = sysMenuService.listByIds(menuIds);
-        String roleNames = roles.stream().map(r -> "ROLE_" + r.getCode()).collect(Collectors.joining(","));
-        String permNames = menus.stream().map(m -> m.getPerms()).collect(Collectors.joining(","));
-        authority = roleNames.concat(",").concat(permNames);
-        log.info("用户ID - {} ---拥有的权限：{}", userId, authority);
-        redisUtil.set("GrantedAuthority:" + sysUser.getLoginname(), authority, 60 * 60);
+            List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where user_id = '" + userId + "'"));
+            List<String> menuIds = sysUserMapper.getNavMenuIds(userId);
+            List<SysMenu> menus = sysMenuService.listByIds(menuIds);
+            String roleNames = roles.stream().map(r -> "ROLE_" + r.getCode()).collect(Collectors.joining(","));
+            String permNames = menus.stream().map(m -> m.getPerms()).collect(Collectors.joining(","));
+            authority = roleNames.concat(",").concat(permNames);
+            log.info("用户ID - {} ---拥有的权限：{}", userId, authority);
+            redisUtil.set("GrantedAuthority:" + sysUser.getLoginname(), authority, 60 * 60);
         }
         return authority;
     }
@@ -85,8 +85,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     // 删除所有与该角色关联的用户的权限信息
     @Override
-    public void clearUserAuthorityInfoByRoleId(Long roleId) {
-        List<SysUser> sysUsers = this.list(new QueryWrapper<SysUser>().inSql("id", "select user_id from sys_user_role where role_id = " + roleId));
+    public void clearUserAuthorityInfoByRoleId(String roleId) {
+        List<SysUser> sysUsers = this.list(new QueryWrapper<SysUser>().inSql("id", "select user_id from sys_user_role where role_id = '" + roleId+ "'"));
         sysUsers.forEach(u -> {
             this.clearUserAuthorityInfo(u.getLoginname());
         });
@@ -94,7 +94,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     // 删除所有与该菜单关联的所有用户的权限信息
     @Override
-    public void clearUserAuthorityInfoByMenuId(Long menuId) {
+    public void clearUserAuthorityInfoByMenuId(String menuId) {
         List<SysUser> sysUsers = sysUserMapper.listByMenuId(menuId);
         sysUsers.forEach(u -> {
             this.clearUserAuthorityInfo(u.getLoginname());

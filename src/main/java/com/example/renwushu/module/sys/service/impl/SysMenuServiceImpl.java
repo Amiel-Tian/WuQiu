@@ -1,5 +1,7 @@
 package com.example.renwushu.module.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.renwushu.common.QueryField;
 import com.example.renwushu.module.sys.dao.SysUserMapper;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.dao.SysMenuMapper;
@@ -36,8 +38,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
         // 获取用户的所有菜单
-        List<Long> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
+        List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
         List<SysMenu> menus = buildTreeMenu(this.listByIds(menuIds));
+        return convert(menus);
+    }
+    @Override
+    public List<SysMenuDto> getNavAll() {
+        // 获取用户的所有菜单
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysMenu::getStatu, QueryField.STATU_NOR_);
+        List<SysMenu> list = list(queryWrapper);
+        List<SysMenu> menus = buildTreeMenu(list);
         return convert(menus);
     }
 
@@ -49,12 +60,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         for (SysMenu menu : menus) {
             // 先寻找各自的孩子
             for (SysMenu e : menus) {
-                if (e.getParentId() == menu.getId()) {
+                if (e.getParentId().equals(menu.getId())) {
                     menu.getChildren().add(e);
                 }
             }
             // 提取出父节点
-            if (menu.getParentId() == 0L) {
+            if (menu.getParentId().equals("0")) {
                 finalMenus.add(menu);
             }
         }
@@ -69,12 +80,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         menus.forEach(m -> {
             SysMenuDto dto = new SysMenuDto();
             dto.setId(m.getId());
-            dto.setName(m.getPerms());
-            dto.setTitle(m.getName());
+            dto.setPerms(m.getPerms());
+            dto.setName(m.getName());
             dto.setComponent(m.getComponent());
             dto.setIcon(m.getIcon());
             dto.setPath(m.getPath());
             dto.setType(m.getType());
+            dto.setSort(m.getSort());
             if (m.getChildren().size() > 0) {
                 dto.setChildren(convert(m.getChildren()));
             }

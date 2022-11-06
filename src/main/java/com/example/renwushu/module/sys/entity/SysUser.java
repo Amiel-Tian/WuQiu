@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import com.example.renwushu.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -32,8 +33,8 @@ public class SysUser  extends BaseEntity implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("用户id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "id")
+    private String id;
 
     @ApiModelProperty("用户名")
     private String username;
@@ -71,5 +72,8 @@ public class SysUser  extends BaseEntity implements Serializable{
     @ApiModelProperty("用户状态 1可用|0不可用")
     private Integer statu;
 
+    @ApiModelProperty("权限列表")
+    @TableField(exist = false)
+    private List<String> roleIdList;
 
 }
