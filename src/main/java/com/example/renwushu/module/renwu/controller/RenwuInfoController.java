@@ -2,25 +2,20 @@ package com.example.renwushu.module.renwu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.module.renwu.entity.RenwuInfo;
-import com.example.renwushu.module.renwu.entity.dto.RenwuInfoParam;
 import com.example.renwushu.module.renwu.service.RenwuInfoService;
-import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +30,7 @@ import java.util.Map;
  * @since 2022-11-03
  */
 @Controller
+@ResponseBody
 @RequestMapping("/renwuInfo")
 public class RenwuInfoController {
     @Autowired
@@ -92,40 +88,41 @@ public class RenwuInfoController {
     }
     @ApiOperation(value = "列表", notes = "列表")
     @RequestMapping(value = "/dates", method = RequestMethod.GET)
-    public AjaxJson listAll(RenwuInfoParam param) {
+    public AjaxJson listAll(RenwuInfo param) {
         AjaxJson ajaxJson = new AjaxJson();
-        QueryWrapper<RenwuInfo> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<RenwuInfo> queryWrapper = createQueryWrapper(param);
         List<RenwuInfo> result = renwuInfoService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
     }
+    @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(int pageNum, int pageSize, String name){
+    public AjaxJson page(RenwuInfo param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<RenwuInfo> page = new Page<>(pageNum, pageSize);
+        IPage<RenwuInfo> page = new Page<>(param.getPageNum(), param.getPageSize());
 
         IPage<RenwuInfo> page1 = renwuInfoService.page(page, new LambdaQueryWrapper<RenwuInfo>());
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
     }
-    static QueryWrapper<RenwuInfo> createQueryWrapper(RenwuInfoParam param){
-        QueryWrapper<RenwuInfo> queryWrapper = new QueryWrapper<>();
+    static LambdaQueryWrapper<RenwuInfo> createQueryWrapper(RenwuInfo param){
+        LambdaQueryWrapper<RenwuInfo> queryWrapper = new LambdaQueryWrapper<>();
 
         if (param.getStatu() != null) {
-            queryWrapper.eq("statu", param.getStatu());
+            queryWrapper.eq(RenwuInfo::getStatu, param.getStatu());
         } else {
-            queryWrapper.eq("statu", "1");
+            queryWrapper.eq(RenwuInfo::getStatu, QueryField.STATU_NOR);
         }
         if (StringUtils.isNotEmpty(param.getOrderBy())) {
             if (StringUtils.isNotEmpty(param.getOrderByType())
                     && "asc".equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(param.getOrderBy());
+                queryWrapper.orderByAsc(RenwuInfo::getOrderBy);
             } else {
-                queryWrapper.orderByDesc(param.getOrderBy());
+                queryWrapper.orderByDesc(RenwuInfo::getOrderBy);
             }
         } else {
-            queryWrapper.orderByDesc("create_date");
+            queryWrapper.orderByDesc(RenwuInfo::getCreateDate);
         }
         return queryWrapper;
     }

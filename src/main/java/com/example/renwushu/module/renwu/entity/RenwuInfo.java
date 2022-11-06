@@ -3,6 +3,8 @@ package com.example.renwushu.module.renwu.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.example.renwushu.common.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -22,7 +24,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("n_renwu_info")
 @ApiModel(value = "RenwuInfo对象", description = "")
-public class RenwuInfo implements Serializable {
+public class RenwuInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
