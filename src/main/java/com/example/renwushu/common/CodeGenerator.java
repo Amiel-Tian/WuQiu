@@ -26,11 +26,7 @@ public class CodeGenerator {
         String xmlPath = System.getProperty("user.dir") + "/gen/src/main/resources/mapper";
         // 需要生成的数据表
         String[] tableArr = new String[]{
-                "sys_user",
-                "sys_role",
-                "sys_user_role",
-                "sys_menu",
-                "sys_role_menu",
+                "n_renwu_info",
         };
 
         FastAutoGenerator.create(url, username, password)
@@ -43,7 +39,7 @@ public class CodeGenerator {
                             .outputDir(moudlePath); // 指定输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.example.renwushu.module.sys") // 设置模块名
+                    builder.parent("com.example.renwushu.module.renwu") // 设置模块名
                             .mapper("dao") // 设置mapper包名
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml, xmlPath)); // 设置xml文件生成目录
                 })

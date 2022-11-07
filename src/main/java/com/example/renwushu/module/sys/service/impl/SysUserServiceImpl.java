@@ -13,6 +13,7 @@ import com.example.renwushu.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Override
+    public SysUser getLoginUser() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SysUser sysUser = new SysUser();
+        sysUser.setLoginname(username);
+        SysUser byUser = getByUser(sysUser);
+
+        return byUser;
+    }
     @Override
     public SysUser getByUser(SysUser sysUser) {
         QueryWrapper queryWrapper = new QueryWrapper();
