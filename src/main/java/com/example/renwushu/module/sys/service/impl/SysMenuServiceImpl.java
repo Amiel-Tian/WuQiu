@@ -44,7 +44,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
     @Override
     public List<SysMenuDto> getNavAll() {
-        // 获取用户的所有菜单
+        // 获取所有菜单
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(SysMenu::getStatu, QueryField.STATU_NOR_);
         List<SysMenu> list = list(queryWrapper);

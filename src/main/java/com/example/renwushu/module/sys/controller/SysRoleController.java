@@ -50,8 +50,19 @@ public class SysRoleController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxJson save(@RequestBody SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
-//        param.setCreateBy();
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!ListUtils.isEmpty(param.getMenuIdList() )){
+            LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<SysRoleMenu>();
+            queryWrapper.eq(SysRoleMenu::getRoleId, param.getId());
+            sysRoleMenuService.remove(queryWrapper);
+
+            for (String s : param.getMenuIdList()) {
+                SysRoleMenu sysRoleMenu = new SysRoleMenu();
+                sysRoleMenu.setId(IdHelp.UUID());
+                sysRoleMenu.setRoleId(param.getId());
+                sysRoleMenu.setMenuId(s);
+                sysRoleMenuService.save(sysRoleMenu);
+            }
+        }
 
         boolean result = sysRoleService.save(param);
         if (result){
@@ -81,6 +92,7 @@ public class SysRoleController {
             }
         }
 
+
         boolean result = sysRoleService.updateById(param);
         if (result){
             sysUserService.clearUserAuthorityInfoByRoleId(param.getId());
@@ -96,7 +108,19 @@ public class SysRoleController {
         param.setStatu(0);
         boolean result = sysRoleService.updateById(param);
         if (result){
+            sysUserService.clearUserAuthorityInfoByRoleId(param.getId());
+        }
+        ajaxJson.setData(result);
+        return ajaxJson;
+    }
+    @ApiOperation(value = "删除", notes = "删除")
+    @RequestMapping(value = "/remove", method = RequestMethod.PUT)
+    public AjaxJson remove(@RequestBody SysRole param) {
+        AjaxJson ajaxJson = new AjaxJson();
 
+        boolean result = sysRoleService.removeById(param.getId());
+        if (result){
+            sysUserService.clearUserAuthorityInfoByRoleId(param.getId());
         }
         ajaxJson.setData(result);
         return ajaxJson;
