@@ -1,5 +1,6 @@
 package com.example.renwushu.module.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.module.sys.entity.SysMenu;
@@ -63,6 +64,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (StringUtils.isNoneBlank(sysUser.getPassword())) {
             queryWrapper.eq("password", sysUser.getPassword());
         }
+        queryWrapper.eq("statu", QueryField.STATU_NOR);
         SysUser one = getOne(queryWrapper);
 
         return one;
@@ -110,5 +112,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUsers.forEach(u -> {
             this.clearUserAuthorityInfo(u.getLoginname());
         });
+    }
+    static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (param.getStatu() != null) {
+            queryWrapper.eq(SysUser::getStatu, param.getStatu());
+        } else {
+            queryWrapper.eq(SysUser::getStatu, QueryField.STATU_NOR);
+        }
+        if (StringUtils.isNotEmpty(param.getOrderBy())) {
+            if (StringUtils.isNotEmpty(param.getOrderByType())
+                    && QueryField.ASC.equals(param.getOrderByType())) {
+                queryWrapper.orderByAsc(SysUser::getStatu);
+            } else {
+                queryWrapper.orderByDesc(SysUser::getOrderBy);
+            }
+        } else {
+            queryWrapper.orderByDesc(SysUser::getCreatedTime);
+        }
+        return queryWrapper;
     }
 }
