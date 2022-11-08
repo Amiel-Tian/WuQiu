@@ -15,7 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -39,7 +41,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
         // 获取用户的所有菜单
         List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
-        List<SysMenu> menus = buildTreeMenu(this.listByIds(menuIds));
+        List<SysMenu> sysMenus = this.listByIds(menuIds);
+
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
+
+        List<SysMenu> menus = buildTreeMenu(collect);
         return convert(menus);
     }
     @Override
@@ -47,8 +53,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 获取所有菜单
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(SysMenu::getStatu, QueryField.STATU_NOR_);
-        List<SysMenu> list = list(queryWrapper);
-        List<SysMenu> menus = buildTreeMenu(list);
+        List<SysMenu> sysMenus = list(queryWrapper);
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
+
+        List<SysMenu> menus = buildTreeMenu(collect);
         return convert(menus);
     }
 
