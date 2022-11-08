@@ -170,7 +170,7 @@ public class SysMenuController {
                 queryWrapper.orderByDesc(SysMenu::getOrderBy);
             }
         } else {
-            queryWrapper.orderByDesc(SysMenu::getSort);
+            queryWrapper.orderByAsc(SysMenu::getSort);
         }
         return queryWrapper;
     }
