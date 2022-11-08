@@ -1,6 +1,7 @@
 package com.example.renwushu.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.renwushu.common.QueryField;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
@@ -75,7 +76,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //         优先从缓存获
             authority = (String) redisUtil.get("GrantedAuthority:" + sysUser.getLoginname());
         } else {
-            List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where user_id = '" + userId + "'"));
+            List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where statu = '"+ QueryField.STATU_NOR +"' and user_id = '" + userId + "'"));
             List<String> menuIds = sysUserMapper.getNavMenuIds(userId);
             List<SysMenu> menus = sysMenuService.listByIds(menuIds);
             String roleNames = roles.stream().map(r -> "ROLE_" + r.getCode()).collect(Collectors.joining(","));

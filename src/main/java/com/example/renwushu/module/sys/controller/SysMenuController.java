@@ -105,7 +105,19 @@ public class SysMenuController {
         param.setStatu(0);
         boolean result = sysMenuService.updateById(param);
         if (result){
+            sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
+        }
+        ajaxJson.setData(result);
+        return ajaxJson;
+    }
+    @ApiOperation(value = "删除", notes = "删除")
+    @RequestMapping(value = "/remove", method = RequestMethod.PUT)
+    public AjaxJson remove(@RequestBody SysMenu param) {
+        AjaxJson ajaxJson = new AjaxJson();
 
+        boolean result = sysMenuService.removeById(param.getId());
+        if (result){
+            sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
         }
         ajaxJson.setData(result);
         return ajaxJson;

@@ -57,6 +57,19 @@ public class SysUserController {
         if (StringUtils.isNotBlank(param.getPassword())) {
             param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         }
+        if (!ListUtils.isEmpty(param.getRoleIdList() )){
+            LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<SysUserRole>();
+            queryWrapper.eq(SysUserRole::getUserId, param.getId());
+            sysUserRoleService.remove(queryWrapper);
+
+            for (String s : param.getRoleIdList()) {
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setId(IdHelp.UUID());
+                sysUserRole.setUserId(param.getId());
+                sysUserRole.setRoleId(s);
+                sysUserRoleService.save(sysUserRole);
+            }
+        }
 
         boolean result = sysUserService.save(param);
         if (result){
@@ -104,7 +117,19 @@ public class SysUserController {
         param.setStatu(0);
         boolean result = sysUserService.updateById(param);
         if (result){
+            sysUserService.clearUserAuthorityInfo(param.getLoginname());
+        }
+        ajaxJson.setData(result);
+        return ajaxJson;
+    }
+    @ApiOperation(value = "删除", notes = "删除")
+    @RequestMapping(value = "/remove", method = RequestMethod.PUT)
+    public AjaxJson remove(@RequestBody SysUser param) {
+        AjaxJson ajaxJson = new AjaxJson();
 
+        boolean result = sysUserService.removeById(param.getId());
+        if (result){
+            sysUserService.clearUserAuthorityInfo(param.getLoginname());
         }
         ajaxJson.setData(result);
         return ajaxJson;
@@ -121,7 +146,6 @@ public class SysUserController {
         if (!ListUtils.isEmpty(list)){
             result.setRoleIdList(list.stream().map(SysUserRole::getRoleId).collect(Collectors.toList()));
         }
-
 
         ajaxJson.setData(result);
         return ajaxJson;
