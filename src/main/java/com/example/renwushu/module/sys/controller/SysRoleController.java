@@ -11,6 +11,7 @@ import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.service.SysRoleMenuService;
 import com.example.renwushu.module.sys.service.SysRoleService;
+import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
@@ -44,12 +45,19 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
     @Autowired
+    private SysUserRoleService sysUserRoleService;
+    @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
     @ApiOperation(value = "新增", notes = "新增")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxJson save(@RequestBody SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
+
+        param.setId(IdHelp.UUID());
+        /*
+         * 同步添加权限菜单表
+         * */
         if (!ListUtils.isEmpty(param.getMenuIdList() )){
             LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<SysRoleMenu>();
             queryWrapper.eq(SysRoleMenu::getRoleId, param.getId());
@@ -78,6 +86,9 @@ public class SysRoleController {
     public AjaxJson update(@RequestBody SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
 
+        /*
+        * 同步修改权限菜单表
+        * */
         if (!ListUtils.isEmpty(param.getMenuIdList() )){
             LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<SysRoleMenu>();
             queryWrapper.eq(SysRoleMenu::getRoleId, param.getId());
@@ -119,6 +130,19 @@ public class SysRoleController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysRoleService.removeById(param.getId());
+        /*
+         * 同步清空权限菜单表
+         * */
+        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysUserRole :: getRoleId, param.getId());
+        sysUserRoleService.remove(queryWrapper);
+        /*
+         * 同步清空权限用户表
+         * */
+        LambdaQueryWrapper<SysRoleMenu> queryWrapper1 = new LambdaQueryWrapper();
+        queryWrapper1.eq(SysRoleMenu :: getRoleId, param.getId());
+        sysRoleMenuService.remove(queryWrapper1);
+
         if (result){
             sysUserService.clearUserAuthorityInfoByRoleId(param.getId());
         }
@@ -151,7 +175,7 @@ public class SysRoleController {
         ajaxJson.setData(result);
         return ajaxJson;
     }
-    @ApiOperation(value = "列表", notes = "列表")
+    @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
     public AjaxJson page(SysRole sysUser){
         AjaxJson ajaxJson = new AjaxJson();

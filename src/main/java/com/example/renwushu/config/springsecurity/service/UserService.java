@@ -1,10 +1,12 @@
 package com.example.renwushu.config.springsecurity.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.SysUserRole;
 import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -35,7 +37,7 @@ public class UserService implements UserDetailsService {
                     .setLoginname(username));
 
             if (user == null){
-                return null;
+                throw new JwtException(StatusCode.USER_LOGIN_NAME_FAIL.statusDesc);
             }
             //获取用户权限信息，如果没有用户信息直接返回
             List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(sysUserService.getAuthorityByUser(user.getId()));
@@ -45,7 +47,7 @@ public class UserService implements UserDetailsService {
 
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            throw new JwtException(StatusCode.USER_LOGIN_NAME_FAIL.statusDesc);
         }
     }
 }

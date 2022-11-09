@@ -128,6 +128,13 @@ public class SysUserController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysUserService.removeById(param.getId());
+        /*
+         * 同步清空权限用户表
+         * */
+        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysUserRole :: getUserId, param.getId());
+        sysUserRoleService.remove(queryWrapper);
+
         if (result){
             sysUserService.clearUserAuthorityInfo(param.getLoginname());
         }
