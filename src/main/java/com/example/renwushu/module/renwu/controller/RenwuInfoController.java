@@ -8,6 +8,7 @@ import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.module.renwu.entity.RenwuInfo;
 import com.example.renwushu.module.renwu.service.RenwuInfoService;
+import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
@@ -84,6 +85,18 @@ public class RenwuInfoController {
         ajaxJson.setData(result);
         return ajaxJson;
     }
+    @ApiOperation(value = "删除", notes = "删除")
+    @RequestMapping(value = "/remove", method = RequestMethod.PUT)
+    public AjaxJson remove(@RequestBody RenwuInfo param) {
+        AjaxJson ajaxJson = new AjaxJson();
+
+        boolean result = renwuInfoService.removeById(param.getId());
+        if (result){
+
+        }
+        ajaxJson.setData(result);
+        return ajaxJson;
+    }
 
     @ApiOperation(value = "获取", notes = "获取")
     @RequestMapping(value = "/get", method = RequestMethod.GET)
@@ -98,6 +111,8 @@ public class RenwuInfoController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(RenwuInfo param) {
         AjaxJson ajaxJson = new AjaxJson();
+        SysUser loginUser = sysUserService.getLoginUser();
+        param.setCreateBy(loginUser.getId());
         LambdaQueryWrapper<RenwuInfo> queryWrapper = createQueryWrapper(param);
         List<RenwuInfo> result = renwuInfoService.list(queryWrapper);
         ajaxJson.setData(result);
