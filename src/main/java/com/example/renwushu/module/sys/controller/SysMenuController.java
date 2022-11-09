@@ -120,7 +120,9 @@ public class SysMenuController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysMenuService.removeById(param.getId());
-
+        /*
+        * 递归删除子项权限
+        * */
         LambdaQueryWrapper<SysMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
         menuLambdaQueryWrapper.eq(SysMenu::getParentId, param.getId());
         List<SysMenu> list = sysMenuService.list(menuLambdaQueryWrapper);
@@ -129,7 +131,9 @@ public class SysMenuController {
                 remove(item);
             });
         }
-
+        /*
+         * 删除权限
+         * */
         LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
         sysRoleMenuService.remove(queryWrapper);

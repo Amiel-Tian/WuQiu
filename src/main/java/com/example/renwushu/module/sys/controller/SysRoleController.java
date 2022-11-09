@@ -55,6 +55,9 @@ public class SysRoleController {
         AjaxJson ajaxJson = new AjaxJson();
 
         param.setId(IdHelp.UUID());
+        /*
+         * 同步添加权限菜单表
+         * */
         if (!ListUtils.isEmpty(param.getMenuIdList() )){
             LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<SysRoleMenu>();
             queryWrapper.eq(SysRoleMenu::getRoleId, param.getId());
@@ -83,6 +86,9 @@ public class SysRoleController {
     public AjaxJson update(@RequestBody SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
 
+        /*
+        * 同步修改权限菜单表
+        * */
         if (!ListUtils.isEmpty(param.getMenuIdList() )){
             LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<SysRoleMenu>();
             queryWrapper.eq(SysRoleMenu::getRoleId, param.getId());
@@ -124,11 +130,15 @@ public class SysRoleController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysRoleService.removeById(param.getId());
-
+        /*
+         * 同步清空权限菜单表
+         * */
         LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(SysUserRole :: getRoleId, param.getId());
         sysUserRoleService.remove(queryWrapper);
-
+        /*
+         * 同步清空权限用户表
+         * */
         LambdaQueryWrapper<SysRoleMenu> queryWrapper1 = new LambdaQueryWrapper();
         queryWrapper1.eq(SysRoleMenu :: getRoleId, param.getId());
         sysRoleMenuService.remove(queryWrapper1);
