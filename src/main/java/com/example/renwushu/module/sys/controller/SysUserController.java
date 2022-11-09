@@ -128,6 +128,11 @@ public class SysUserController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysUserService.removeById(param.getId());
+
+        LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysUserRole :: getUserId, param.getId());
+        sysUserRoleService.remove(queryWrapper);
+
         if (result){
             sysUserService.clearUserAuthorityInfo(param.getLoginname());
         }

@@ -10,8 +10,10 @@ import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysMenu;
+import com.example.renwushu.module.sys.entity.SysRoleMenu;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysMenuService;
+import com.example.renwushu.module.sys.service.SysRoleMenuService;
 import com.example.renwushu.module.sys.service.SysRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
@@ -43,6 +45,8 @@ import java.util.Map;
 public class SysMenuController {
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
 
     @Autowired
     private SysMenuService sysMenuService;
@@ -116,6 +120,20 @@ public class SysMenuController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysMenuService.removeById(param.getId());
+
+        LambdaQueryWrapper<SysMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        menuLambdaQueryWrapper.eq(SysMenu::getParentId, param.getId());
+        List<SysMenu> list = sysMenuService.list(menuLambdaQueryWrapper);
+        if (list != null && list.size() > 0){
+            list.forEach(item -> {
+                remove(item);
+            });
+        }
+
+        LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
+        sysRoleMenuService.remove(queryWrapper);
+
         if (result){
             sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
         }

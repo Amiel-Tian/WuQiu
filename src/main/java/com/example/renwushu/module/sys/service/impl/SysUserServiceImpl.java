@@ -110,7 +110,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void clearUserAuthorityInfoByMenuId(String menuId) {
         List<SysUser> sysUsers = sysUserMapper.listByMenuId(menuId);
         sysUsers.forEach(u -> {
-            this.clearUserAuthorityInfo(u.getLoginname());
+            if (u != null) {
+                this.clearUserAuthorityInfo(u.getLoginname());
+            }
         });
     }
     static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){

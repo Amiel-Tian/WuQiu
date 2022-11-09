@@ -68,12 +68,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         for (SysMenu menu : menus) {
             // 先寻找各自的孩子
             for (SysMenu e : menus) {
-                if (e.getParentId().equals(menu.getId())) {
+                if (e != null && menu != null && e.getParentId().equals(menu.getId())) {
                     menu.getChildren().add(e);
                 }
             }
             // 提取出父节点
-            if (menu.getParentId().equals("0")) {
+            if (menu != null && menu.getParentId().equals("0")) {
                 finalMenus.add(menu);
             }
         }
