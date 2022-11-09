@@ -139,6 +139,9 @@ public class RenwuInfoController {
         if (StringUtils.isNotBlank(param.getCreateBy())){
             queryWrapper.eq(RenwuInfo::getCreateBy, param.getCreateBy());
         }
+        if (StringUtils.isNotBlank(param.getYear())){
+
+        }
 
         if (param.getStatu() != null) {
             queryWrapper.eq(RenwuInfo::getStatu, param.getStatu());

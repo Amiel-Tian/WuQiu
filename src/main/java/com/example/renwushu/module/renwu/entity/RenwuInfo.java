@@ -1,5 +1,6 @@
 package com.example.renwushu.module.renwu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
@@ -81,6 +82,11 @@ public class RenwuInfo extends BaseEntity implements Serializable {
 
     @ApiModelProperty("状态")
     private Integer statu;
+
+    @TableField(exist = false)
+    private String year;
+    @TableField(exist = false)
+    private String month;
 
 
 }
