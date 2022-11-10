@@ -77,7 +77,7 @@ public class RenwuInfoController {
     public AjaxJson delete(@RequestBody RenwuInfo param) {
         AjaxJson ajaxJson = new AjaxJson();
 
-        param.setStatu(0);
+        param.setStatus(0);
         boolean result = renwuInfoService.updateById(param);
         if (result) {
 
@@ -143,10 +143,10 @@ public class RenwuInfoController {
 
         }
 
-        if (param.getStatu() != null) {
-            queryWrapper.eq(RenwuInfo::getStatu, param.getStatu());
+        if (param.getStatus() != null) {
+            queryWrapper.eq(RenwuInfo::getStatus, param.getStatus());
         } else {
-            queryWrapper.eq(RenwuInfo::getStatu, QueryField.STATU_NOR);
+            queryWrapper.eq(RenwuInfo::getStatus, QueryField.STATU_NOR);
         }
         if (StringUtils.isNotEmpty(param.getOrderBy())) {
             if (StringUtils.isNotEmpty(param.getOrderByType())

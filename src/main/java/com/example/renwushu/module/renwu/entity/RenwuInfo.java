@@ -81,7 +81,7 @@ public class RenwuInfo extends BaseEntity implements Serializable {
     private Date updateDate;
 
     @ApiModelProperty("状态")
-    private Integer statu;
+    private Integer status;
 
     @TableField(exist = false)
     private String year;
