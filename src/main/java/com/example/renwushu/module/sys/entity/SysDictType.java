@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.example.renwushu.common.base.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -21,20 +23,20 @@ import lombok.Setter;
 @Setter
 @TableName("sys_dict_type")
 @ApiModel(value = "SysDictType对象", description = "字典类型表")
-public class SysDictType implements Serializable {
+public class SysDictType extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("字典类型表")
-    private String dictId;
+    private String id;
 
     @ApiModelProperty("字典名称")
     private String dictName;
 
-    @ApiModelProperty("字典类型")
+    @ApiModelProperty("字典编码")
     private String dictType;
 
-    @ApiModelProperty("是否系统字典：0系统、1业务")
+    @ApiModelProperty("字典类型：0系统、1业务")
     private String isSys;
 
     @ApiModelProperty("状态：0正常 1删除 2停用")
