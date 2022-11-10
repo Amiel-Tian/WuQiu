@@ -60,7 +60,7 @@ public class SysMenu extends BaseEntity implements Serializable {
     private Date updatedTime;
 
     @ApiModelProperty("状态1可用|0不可用")
-    private Integer statu;
+    private Integer status;
     @ApiModelProperty("排序")
     private Integer sort;
 

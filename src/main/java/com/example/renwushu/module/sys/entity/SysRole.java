@@ -47,7 +47,7 @@ public class SysRole extends BaseEntity implements Serializable {
     private Date updatedTime;
 
     @ApiModelProperty("角色状态 1可用|0不可用")
-    private Integer statu;
+    private Integer status;
 
     @TableField(exist = false)
     @ApiModelProperty("权限菜单列表")

@@ -53,7 +53,7 @@ public class SysUserController {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         param.setId(IdHelp.UUID());
-        param.setStatu(QueryField.STATU_NOR_);
+        param.setStatus(QueryField.STATU_NOR_);
         if (StringUtils.isNotBlank(param.getPassword())) {
             param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         }
@@ -114,7 +114,7 @@ public class SysUserController {
     public AjaxJson delete(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
 
-        param.setStatu(0);
+        param.setStatus(0);
         boolean result = sysUserService.updateById(param);
         if (result){
             sysUserService.clearUserAuthorityInfo(param.getLoginname());
@@ -180,15 +180,15 @@ public class SysUserController {
     static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (param.getStatu() != null) {
-            queryWrapper.eq(SysUser::getStatu, param.getStatu());
+        if (param.getStatus() != null) {
+            queryWrapper.eq(SysUser::getStatus, param.getStatus());
         } else {
-            queryWrapper.eq(SysUser::getStatu, QueryField.STATU_NOR);
+            queryWrapper.eq(SysUser::getStatus, QueryField.STATU_NOR);
         }
         if (StringUtils.isNotEmpty(param.getOrderBy())) {
             if (StringUtils.isNotEmpty(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysUser::getStatu);
+                queryWrapper.orderByAsc(SysUser::getStatus);
             } else {
                 queryWrapper.orderByDesc(SysUser::getOrderBy);
             }

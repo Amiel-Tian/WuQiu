@@ -26,11 +26,8 @@ public class CodeGenerator {
         String xmlPath = System.getProperty("user.dir") + "/gen/src/main/resources/mapper";
         // 需要生成的数据表
         String[] tableArr = new String[]{
-                "sys_user",
-                "sys_role",
-                "sys_user_role",
-                "sys_menu",
-                "sys_role_menu",
+                "sys_dict_data",
+                "sys_dict_type",
         };
 
         FastAutoGenerator.create(url, username, password)

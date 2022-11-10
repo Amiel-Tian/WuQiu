@@ -64,7 +64,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (StringUtils.isNoneBlank(sysUser.getPassword())) {
             queryWrapper.eq("password", sysUser.getPassword());
         }
-        queryWrapper.eq("statu", QueryField.STATU_NOR);
+        queryWrapper.eq("status", QueryField.STATU_NOR);
         SysUser one = getOne(queryWrapper);
 
         return one;
@@ -78,7 +78,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //         优先从缓存获
             authority = (String) redisUtil.get("GrantedAuthority:" + sysUser.getLoginname());
         } else {
-            List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where statu = '"+ QueryField.STATU_NOR +"' and user_id = '" + userId + "'"));
+            List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>().inSql("id", "select role_id from sys_user_role where status = '"+ QueryField.STATU_NOR +"' and user_id = '" + userId + "'"));
             List<String> menuIds = sysUserMapper.getNavMenuIds(userId);
             List<SysMenu> menus = sysMenuService.listByIds(menuIds);
             String roleNames = roles.stream().map(r -> "ROLE_" + r.getCode()).collect(Collectors.joining(","));
@@ -118,15 +118,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (param.getStatu() != null) {
-            queryWrapper.eq(SysUser::getStatu, param.getStatu());
+        if (param.getStatus() != null) {
+            queryWrapper.eq(SysUser::getStatus, param.getStatus());
         } else {
-            queryWrapper.eq(SysUser::getStatu, QueryField.STATU_NOR);
+            queryWrapper.eq(SysUser::getStatus, QueryField.STATU_NOR);
         }
         if (StringUtils.isNotEmpty(param.getOrderBy())) {
             if (StringUtils.isNotEmpty(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysUser::getStatu);
+                queryWrapper.orderByAsc(SysUser::getStatus);
             } else {
                 queryWrapper.orderByDesc(SysUser::getOrderBy);
             }

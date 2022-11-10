@@ -116,7 +116,7 @@ public class SysRoleController {
     public AjaxJson delete(@RequestBody SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
 
-        param.setStatu(0);
+        param.setStatus(0);
         boolean result = sysRoleService.updateById(param);
         if (result){
             sysUserService.clearUserAuthorityInfoByRoleId(param.getId());
@@ -189,15 +189,15 @@ public class SysRoleController {
     static LambdaQueryWrapper<SysRole> createQueryWrapper(SysRole param){
         LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (param.getStatu() != null) {
-            queryWrapper.eq(SysRole::getStatu, param.getStatu());
+        if (param.getStatus() != null) {
+            queryWrapper.eq(SysRole::getStatus, param.getStatus());
         } else {
-            queryWrapper.eq(SysRole::getStatu, QueryField.STATU_NOR);
+            queryWrapper.eq(SysRole::getStatus, QueryField.STATU_NOR);
         }
         if (StringUtils.isNotEmpty(param.getOrderBy())) {
             if (StringUtils.isNotEmpty(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysRole::getStatu);
+                queryWrapper.orderByAsc(SysRole::getStatus);
             } else {
                 queryWrapper.orderByDesc(SysRole::getOrderBy);
             }

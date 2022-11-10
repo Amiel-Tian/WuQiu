@@ -1,7 +1,7 @@
 package com.example.renwushu.common;
 
 public class QueryField {
-    public static String STATU = "statu";
+    public static String STATUS = "status";
     public static String STATU_DEL = "0";
     public static int STATU_DEL_ = 0;
     public static String STATU_NOR = "1";

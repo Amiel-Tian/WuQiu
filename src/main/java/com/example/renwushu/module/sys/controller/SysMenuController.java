@@ -77,7 +77,7 @@ public class SysMenuController {
         AjaxJson ajaxJson = new AjaxJson();
 
         param.setId(IdHelp.UUID());
-        param.setStatu(QueryField.STATU_NOR_);
+        param.setStatus(QueryField.STATU_NOR_);
         param.setCreatedTime(new Date());
 
         boolean result = sysMenuService.save(param);
@@ -106,7 +106,7 @@ public class SysMenuController {
     public AjaxJson delete(@RequestBody SysMenu param) {
         AjaxJson ajaxJson = new AjaxJson();
 
-        param.setStatu(0);
+        param.setStatus(0);
         boolean result = sysMenuService.updateById(param);
         if (result){
             sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
@@ -179,15 +179,15 @@ public class SysMenuController {
             queryWrapper.eq(SysMenu::getParentId, param.getParentId());
         }
         /**/
-        if (param.getStatu() != null) {
-            queryWrapper.eq(SysMenu::getStatu, param.getStatu());
+        if (param.getStatus() != null) {
+            queryWrapper.eq(SysMenu::getStatus, param.getStatus());
         } else {
-            queryWrapper.eq(SysMenu::getStatu, QueryField.STATU_NOR);
+            queryWrapper.eq(SysMenu::getStatus, QueryField.STATU_NOR);
         }
         if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderBy())) {
             if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysMenu::getStatu);
+                queryWrapper.orderByAsc(SysMenu::getStatus);
             } else {
                 queryWrapper.orderByDesc(SysMenu::getOrderBy);
             }

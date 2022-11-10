@@ -52,7 +52,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<SysMenuDto> getNavAll() {
         // 获取所有菜单
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.eq(SysMenu::getStatu, QueryField.STATU_NOR_);
+        queryWrapper.eq(SysMenu::getStatus, QueryField.STATU_NOR_);
         List<SysMenu> sysMenus = list(queryWrapper);
         List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
 

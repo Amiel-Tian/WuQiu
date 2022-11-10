@@ -70,7 +70,7 @@ public class SysUser  extends BaseEntity implements Serializable{
     private LocalDateTime lastLoginTime;
 
     @ApiModelProperty("用户状态 1可用|0不可用")
-    private Integer statu;
+    private Integer status;
 
     @ApiModelProperty("权限列表")
     @TableField(exist = false)
