@@ -161,7 +161,7 @@ public class SysUserController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
-        LambdaQueryWrapper<SysUser> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<SysUser> queryWrapper = sysUserService.createQueryWrapper(param);
         List<SysUser> result = sysUserService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
@@ -176,25 +176,5 @@ public class SysUserController {
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
-    }
-    static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-
-        if (param.getStatus() != null) {
-            queryWrapper.eq(SysUser::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(SysUser::getStatus, QueryField.STATU_NOR);
-        }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
-                    && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysUser::getStatus);
-            } else {
-                queryWrapper.orderByDesc(SysUser::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByDesc(SysUser::getCreatedTime);
-        }
-        return queryWrapper;
     }
 }

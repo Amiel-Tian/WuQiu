@@ -24,6 +24,8 @@ public enum StatusCode {
     USER_SESSION_ERRO("130", "session验证错误"),
     USER_SESSION_INVALID("131", "session验证失效"),
 
+    CODE_VALUE_FAIL("201", "重复编码值"),
+
     AUTHENTICATION_FAIL("300","身份验证失败"),
 
     EXCEPTION_SYSTEM("500", "系统异常"),

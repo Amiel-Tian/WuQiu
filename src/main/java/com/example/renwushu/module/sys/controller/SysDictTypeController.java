@@ -6,8 +6,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.common.json.StatusCode;
+import com.example.renwushu.module.sys.entity.SysDictData;
 import com.example.renwushu.module.sys.entity.SysDictType;
 import com.example.renwushu.module.sys.entity.SysUser;
+import com.example.renwushu.module.sys.entity.dto.SysDictDto;
+import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
 import com.example.renwushu.module.sys.service.SysDictDataService;
 import com.example.renwushu.module.sys.service.SysDictTypeService;
 import com.example.renwushu.module.sys.service.SysUserService;
@@ -41,6 +45,14 @@ public class SysDictTypeController {
     private SysDictTypeService sysDictTypeService;
     @Autowired
     private SysDictDataService sysDictDataService;
+    @ApiOperation(value = "获取字典树", notes = "获取字典树")
+    @RequestMapping(value = "/getTreeDict", method = RequestMethod.GET)
+    public AjaxJson getTreeDict() {
+        AjaxJson ajaxJson = new AjaxJson();
+        List<SysDictDto> list = sysDictTypeService.getTreeDict();
+        ajaxJson.setData(list);
+        return ajaxJson;
+    }
 
     @ApiOperation(value = "新增", notes = "新增")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -48,6 +60,12 @@ public class SysDictTypeController {
         AjaxJson ajaxJson = new AjaxJson();
 
         param.setId(IdHelp.UUID());
+        if (StringUtils.isNotBlank(param.getDictType())){
+            SysDictType one = sysDictTypeService.getOne(sysDictTypeService.createQueryWrapper(new SysDictType().setDictType(param.getDictType())));
+            if (one != null){
+                return AjaxJson.returnExceptionInfo(StatusCode.CODE_VALUE_FAIL);
+            }
+        }
 
         boolean result = sysDictTypeService.save(param);
         if (result){
@@ -62,7 +80,16 @@ public class SysDictTypeController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public AjaxJson update(@RequestBody SysDictType param) {
         AjaxJson ajaxJson = new AjaxJson();
-       
+        if (StringUtils.isNotBlank(param.getDictType())){
+
+            LambdaQueryWrapper<SysDictType> queryWrapper =  new LambdaQueryWrapper();
+            queryWrapper.eq(SysDictType::getDictType, param.getDictType());
+            queryWrapper.ne(SysDictType::getId, param.getId());
+            SysDictType one = sysDictTypeService.getOne(queryWrapper);
+            if (one != null){
+                return AjaxJson.returnExceptionInfo(StatusCode.CODE_VALUE_FAIL);
+            }
+        }
         boolean result = sysDictTypeService.updateById(param);
         if (result){
 
@@ -89,6 +116,7 @@ public class SysDictTypeController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysDictTypeService.removeById(param.getId());
+        sysDictDataService.remove(sysDictDataService.createQueryWrapper(new SysDictData().setDictId(param.getId())));
 
         if (result){
 
@@ -109,7 +137,7 @@ public class SysDictTypeController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysDictType param) {
         AjaxJson ajaxJson = new AjaxJson();
-        LambdaQueryWrapper<SysDictType> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<SysDictType> queryWrapper = sysDictTypeService.createQueryWrapper(param);
         List<SysDictType> result = sysDictTypeService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
@@ -124,25 +152,5 @@ public class SysDictTypeController {
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
-    }
-    static LambdaQueryWrapper<SysDictType> createQueryWrapper(SysDictType param){
-        LambdaQueryWrapper<SysDictType> queryWrapper = new LambdaQueryWrapper<>();
-
-        if (param.getStatus() != null) {
-            queryWrapper.eq(SysDictType::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(SysDictType::getStatus, QueryField.STATU_NOR);
-        }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
-                    && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysDictType::getStatus);
-            } else {
-                queryWrapper.orderByDesc(SysDictType::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByDesc(SysDictType::getCreateDate);
-        }
-        return queryWrapper;
     }
 }

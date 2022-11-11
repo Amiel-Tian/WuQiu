@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -21,6 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @TableName("sys_dict_type")
 @ApiModel(value = "SysDictType对象", description = "字典类型表")
 public class SysDictType extends BaseEntity implements Serializable {
@@ -64,7 +66,7 @@ public class SysDictType extends BaseEntity implements Serializable {
     private String parentIds;
 
     @ApiModelProperty("本级排序号（升序）")
-    private BigDecimal treeSort;
+    private Integer treeSort;
 
     @ApiModelProperty("级联，0否，1是")
     private String cascaded;
