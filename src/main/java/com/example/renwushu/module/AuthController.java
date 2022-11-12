@@ -3,17 +3,13 @@ package com.example.renwushu.module;
 import com.example.renwushu.common.base.BaseController;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
-import com.example.renwushu.config.springsecurity.service.UserService;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.dto.LoginParam;
 import com.example.renwushu.module.sys.service.SysUserService;
-import com.example.renwushu.utils.JwtUtil;
 import com.example.renwushu.utils.KaptchaUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,10 +56,14 @@ public class AuthController extends BaseController {
     }
 
     @GetMapping("/getUserInfo")
-    public SysUser getUserInfo(Principal principal) {
+    public AjaxJson getUserInfo(Principal principal) {
         String username = principal.getName();
         SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
 
-        return sysUser;
+        if (sysUser == null){
+            return AjaxJson.returnExceptionInfo(StatusCode.USER_UNLOGIN);
+        }
+
+        return new AjaxJson().setData(sysUser);
     }
 }

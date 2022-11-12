@@ -26,10 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -57,6 +54,9 @@ public class SysMenuController {
     @ResponseBody
     public AjaxJson nav() {
         SysUser sysUser = sysUserService.getLoginUser();
+        if (sysUser == null){
+            return new AjaxJson().setData(MapUtil.builder().put("nav", new ArrayList<>()).put("authoritys", new ArrayList<>()).map());
+        }
         String[] authoritys = StringUtils.tokenizeToStringArray(sysUserService.getAuthorityByUser(sysUser.getId()), ",");
         return new AjaxJson().setData(MapUtil.builder().put("nav", sysMenuService.getcurrentUserNav()).put("authoritys", authoritys).map());
     }
