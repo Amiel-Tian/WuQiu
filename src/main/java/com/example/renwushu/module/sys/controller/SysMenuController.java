@@ -94,6 +94,12 @@ public class SysMenuController {
         boolean result = sysMenuService.updateById(param);
         if (result){
             sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
+            /*
+             * 删除权限
+             * */
+            LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
+            queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
+            sysRoleMenuService.remove(queryWrapper);
         }
         ajaxJson.setData(result);
         return ajaxJson;
@@ -117,26 +123,26 @@ public class SysMenuController {
         AjaxJson ajaxJson = new AjaxJson();
 
         boolean result = sysMenuService.removeById(param.getId());
-        /*
-        * 递归删除子项权限
-        * */
-        LambdaQueryWrapper<SysMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        menuLambdaQueryWrapper.eq(SysMenu::getParentId, param.getId());
-        List<SysMenu> list = sysMenuService.list(menuLambdaQueryWrapper);
-        if (list != null && list.size() > 0){
-            list.forEach(item -> {
-                remove(item);
-            });
-        }
-        /*
-         * 删除权限
-         * */
-        LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
-        sysRoleMenuService.remove(queryWrapper);
 
         if (result){
             sysUserService.clearUserAuthorityInfoByMenuId(param.getId());
+            /*
+             * 递归删除子项权限
+             * */
+            LambdaQueryWrapper<SysMenu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            menuLambdaQueryWrapper.eq(SysMenu::getParentId, param.getId());
+            List<SysMenu> list = sysMenuService.list(menuLambdaQueryWrapper);
+            if (list != null && list.size() > 0){
+                list.forEach(item -> {
+                    remove(item);
+                });
+            }
+            /*
+             * 删除权限
+             * */
+            LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
+            queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
+            sysRoleMenuService.remove(queryWrapper);
         }
         ajaxJson.setData(result);
         return ajaxJson;
