@@ -115,7 +115,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
         });
     }
-    static LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
+    @Override
+    public LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
 
         if (param.getStatus() != null) {

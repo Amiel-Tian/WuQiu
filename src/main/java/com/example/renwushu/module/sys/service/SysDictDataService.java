@@ -1,5 +1,6 @@
 package com.example.renwushu.module.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.module.sys.entity.SysDictData;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysDictDataService extends IService<SysDictData> {
 
+    LambdaQueryWrapper<SysDictData> createQueryWrapper(SysDictData param);
 }

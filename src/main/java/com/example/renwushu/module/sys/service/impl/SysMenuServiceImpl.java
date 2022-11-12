@@ -102,4 +102,30 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         });
         return menuDtos;
     }
+
+    @Override
+    public LambdaQueryWrapper<SysMenu> createQueryWrapper(SysMenu param){
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+
+        if (param.getParentId() != null) {
+            queryWrapper.eq(SysMenu::getParentId, param.getParentId());
+        }
+        /**/
+        if (param.getStatus() != null) {
+            queryWrapper.eq(SysMenu::getStatus, param.getStatus());
+        } else {
+//            queryWrapper.eq(SysMenu::getStatus, QueryField.STATU_NOR);
+        }
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderBy())) {
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderByType())
+                    && QueryField.ASC.equals(param.getOrderByType())) {
+                queryWrapper.orderByAsc(SysMenu::getStatus);
+            } else {
+                queryWrapper.orderByDesc(SysMenu::getOrderBy);
+            }
+        } else {
+            queryWrapper.orderByAsc(SysMenu::getSort);
+        }
+        return queryWrapper;
+    }
 }

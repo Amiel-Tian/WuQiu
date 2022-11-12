@@ -170,7 +170,7 @@ public class SysRoleController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysRole param) {
         AjaxJson ajaxJson = new AjaxJson();
-        LambdaQueryWrapper<SysRole> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<SysRole> queryWrapper = sysRoleService.createQueryWrapper(param);
         List<SysRole> result = sysRoleService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
@@ -185,25 +185,5 @@ public class SysRoleController {
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
-    }
-    static LambdaQueryWrapper<SysRole> createQueryWrapper(SysRole param){
-        LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
-
-        if (param.getStatus() != null) {
-            queryWrapper.eq(SysRole::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(SysRole::getStatus, QueryField.STATU_NOR);
-        }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
-                    && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysRole::getStatus);
-            } else {
-                queryWrapper.orderByDesc(SysRole::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByDesc(SysRole::getCreatedTime);
-        }
-        return queryWrapper;
     }
 }

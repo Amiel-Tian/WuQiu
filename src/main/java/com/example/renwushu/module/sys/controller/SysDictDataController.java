@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysDictData;
+import com.example.renwushu.module.sys.entity.SysDictType;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysDictDataService;
 import com.example.renwushu.module.sys.service.SysUserService;
@@ -46,7 +48,15 @@ public class SysDictDataController {
         AjaxJson ajaxJson = new AjaxJson();
 
         param.setId(IdHelp.UUID());
-
+        if (StringUtils.isNotBlank(param.getDictKey())){
+            LambdaQueryWrapper<SysDictData> queryWrapper =  new LambdaQueryWrapper();
+            queryWrapper.eq(SysDictData::getDictId, param.getDictId());
+            queryWrapper.eq(SysDictData::getDictKey, param.getDictKey());
+            SysDictData one = sysDictDataService.getOne(queryWrapper);
+            if (one != null){
+                return AjaxJson.returnExceptionInfo(StatusCode.CODE_VALUE_FAIL);
+            }
+        }
         boolean result = sysDictDataService.save(param);
         if (result){
             Map map = new HashMap();
@@ -60,7 +70,16 @@ public class SysDictDataController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public AjaxJson update(@RequestBody SysDictData param) {
         AjaxJson ajaxJson = new AjaxJson();
-
+        if (StringUtils.isNotBlank(param.getDictKey())){
+            LambdaQueryWrapper<SysDictData> queryWrapper =  new LambdaQueryWrapper();
+            queryWrapper.eq(SysDictData::getDictId, param.getDictId());
+            queryWrapper.eq(SysDictData::getDictKey, param.getDictKey());
+            queryWrapper.ne(SysDictData::getId, param.getId());
+            SysDictData one = sysDictDataService.getOne(queryWrapper);
+            if (one != null){
+                return AjaxJson.returnExceptionInfo(StatusCode.CODE_VALUE_FAIL);
+            }
+        }
         boolean result = sysDictDataService.updateById(param);
         if (result){
 
@@ -107,40 +126,19 @@ public class SysDictDataController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysDictData param) {
         AjaxJson ajaxJson = new AjaxJson();
-        LambdaQueryWrapper<SysDictData> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<SysDictData> queryWrapper = sysDictDataService.createQueryWrapper(param);
         List<SysDictData> result = sysDictDataService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
     }
     @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(SysDictData sysUser){
+    public AjaxJson page(SysDictData param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<SysDictData> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
-
-        IPage<SysDictData> page1 = sysDictDataService.page(page, new LambdaQueryWrapper<SysDictData>());
+        IPage<SysDictData> page = new Page<>(param.getPageNum(), param.getPageSize());
+        IPage<SysDictData> page1 = sysDictDataService.page(page, sysDictDataService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
-    }
-    static LambdaQueryWrapper<SysDictData> createQueryWrapper(SysDictData param){
-        LambdaQueryWrapper<SysDictData> queryWrapper = new LambdaQueryWrapper<>();
-
-        if (param.getStatus() != null) {
-            queryWrapper.eq(SysDictData::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(SysDictData::getStatus, QueryField.STATU_NOR);
-        }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
-                    && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysDictData::getStatus);
-            } else {
-                queryWrapper.orderByDesc(SysDictData::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByDesc(SysDictData::getCreateDate);
-        }
-        return queryWrapper;
     }
 }

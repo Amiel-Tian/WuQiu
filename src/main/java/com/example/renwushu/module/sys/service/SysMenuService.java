@@ -1,5 +1,6 @@
 package com.example.renwushu.module.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
@@ -19,4 +20,6 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenuDto> getcurrentUserNav();
 
     List<SysMenuDto> getNavAll();
+
+    LambdaQueryWrapper<SysMenu> createQueryWrapper(SysMenu param);
 }

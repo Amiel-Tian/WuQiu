@@ -1,7 +1,11 @@
 package com.example.renwushu.module.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.module.sys.entity.SysDictType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.renwushu.module.sys.entity.dto.SysDictDto;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysDictTypeService extends IService<SysDictType> {
 
+    LambdaQueryWrapper<SysDictType> createQueryWrapper(SysDictType param);
+
+    List<SysDictDto> getTreeDict();
 }

@@ -55,17 +55,14 @@ public class SysMenuController {
      */
     @GetMapping("/nav")
     @ResponseBody
-    public AjaxJson nav(Principal principal) {
-        String username = principal.getName();
-        SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
-        // ROLE_Admin,sys:user:save
+    public AjaxJson nav() {
+        SysUser sysUser = sysUserService.getLoginUser();
         String[] authoritys = StringUtils.tokenizeToStringArray(sysUserService.getAuthorityByUser(sysUser.getId()), ",");
         return new AjaxJson().setData(MapUtil.builder().put("nav", sysMenuService.getcurrentUserNav()).put("authoritys", authoritys).map());
     }
     @GetMapping("/navAll")
     @ResponseBody
-    public AjaxJson navAll(Principal principal) {
-        // ROLE_Admin,sys:user:save
+    public AjaxJson navAll() {
         Map map = new HashMap();
         map.put("nav", sysMenuService.getNavAll());
         return new AjaxJson().setData(map);
@@ -156,7 +153,7 @@ public class SysMenuController {
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public AjaxJson listAll(SysMenu param) {
         AjaxJson ajaxJson = new AjaxJson();
-        LambdaQueryWrapper<SysMenu> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<SysMenu> queryWrapper = sysMenuService.createQueryWrapper(param);
         List<SysMenu> result = sysMenuService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
@@ -167,33 +164,9 @@ public class SysMenuController {
         AjaxJson ajaxJson = new AjaxJson();
         IPage<SysMenu> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
 
-        IPage<SysMenu> page1 = sysMenuService.page(page, createQueryWrapper(sysUser));
+        IPage<SysMenu> page1 = sysMenuService.page(page, sysMenuService.createQueryWrapper(sysUser));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
-    }
-    static LambdaQueryWrapper<SysMenu> createQueryWrapper(SysMenu param){
-        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-
-        if (param.getParentId() != null) {
-            queryWrapper.eq(SysMenu::getParentId, param.getParentId());
-        }
-        /**/
-        if (param.getStatus() != null) {
-            queryWrapper.eq(SysMenu::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(SysMenu::getStatus, QueryField.STATU_NOR);
-        }
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderBy())) {
-            if (org.apache.commons.lang3.StringUtils.isNotBlank(param.getOrderByType())
-                    && QueryField.ASC.equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(SysMenu::getStatus);
-            } else {
-                queryWrapper.orderByDesc(SysMenu::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByAsc(SysMenu::getSort);
-        }
-        return queryWrapper;
     }
 }
