@@ -37,8 +37,12 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         List<SysDictType> dictTypeList = this.list(queryWrapper);
 
         List<String> collect = dictTypeList.stream().map(SysDictType::getId).collect(Collectors.toList());
-        List<SysDictData> dictDataList = sysDictDataService.listByIds(collect);
-        dictDataList = dictDataList.stream().filter(f -> f.getStatus().equals(QueryField.STATU_NOR)).collect(Collectors.toList());
+
+        LambdaQueryWrapper<SysDictData> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.in(SysDictData::getDictId,collect);
+        lambdaQueryWrapper.eq(SysDictData::getStatus,QueryField.STATU_NOR);
+        lambdaQueryWrapper.orderByAsc(SysDictData::getTreeSort);
+        List<SysDictData> dictDataList = sysDictDataService.list(lambdaQueryWrapper);
 
         return buildTreeDict(dictTypeList,dictDataList);
     }

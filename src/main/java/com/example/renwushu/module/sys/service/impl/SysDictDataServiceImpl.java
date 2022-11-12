@@ -26,9 +26,20 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
     * dictId
     * key
     * */
-    public String getValue(String dictId, String key){
+    public String getValueById(String dictId, String key){
         SysDictData sysDictData = new SysDictData();
         sysDictData.setDictId(dictId);
+
+        SysDictData one = this.getOne(createQueryWrapper(sysDictData));
+        if (one != null && StringUtils.isNotBlank(one.getDictValue())){
+            return one.getDictValue();
+        }
+
+        return "";
+    }
+    public String getValue(String dictKey, String key){
+        SysDictData sysDictData = new SysDictData();
+        sysDictData.setDictKey(dictKey);
 
         SysDictData one = this.getOne(createQueryWrapper(sysDictData));
         if (one != null && StringUtils.isNotBlank(one.getDictValue())){
