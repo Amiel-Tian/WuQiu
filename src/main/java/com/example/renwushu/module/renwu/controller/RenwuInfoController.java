@@ -12,6 +12,7 @@ import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
+import com.example.renwushu.utils.ToolUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,7 @@ public class RenwuInfoController {
         param.setId(IdHelp.UUID());
         SysUser loginUser = sysUserService.getLoginUser();
         param.setCreateBy(loginUser.getId());
-
+        param.setCreateDate(new Date());
         boolean result = renwuInfoService.save(param);
         if (result) {
             Map map = new HashMap();
@@ -113,7 +115,7 @@ public class RenwuInfoController {
         AjaxJson ajaxJson = new AjaxJson();
         SysUser loginUser = sysUserService.getLoginUser();
         param.setCreateBy(loginUser.getId());
-        LambdaQueryWrapper<RenwuInfo> queryWrapper = createQueryWrapper(param);
+        LambdaQueryWrapper<RenwuInfo> queryWrapper = renwuInfoService.createQueryWrapper(param);
         List<RenwuInfo> result = renwuInfoService.list(queryWrapper);
         ajaxJson.setData(result);
         return ajaxJson;
@@ -127,38 +129,12 @@ public class RenwuInfoController {
         SysUser loginUser = sysUserService.getLoginUser();
         param.setCreateBy(loginUser.getId());
 
-        IPage<RenwuInfo> page1 = renwuInfoService.page(page, createQueryWrapper(param));
+        IPage<RenwuInfo> page1 = renwuInfoService.page(page, renwuInfoService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
     }
 
-    static LambdaQueryWrapper<RenwuInfo> createQueryWrapper(RenwuInfo param) {
-        LambdaQueryWrapper<RenwuInfo> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (StringUtils.isNotBlank(param.getCreateBy())){
-            queryWrapper.eq(RenwuInfo::getCreateBy, param.getCreateBy());
-        }
-        if (StringUtils.isNotBlank(param.getYear())){
-
-        }
-
-        if (param.getStatus() != null) {
-            queryWrapper.eq(RenwuInfo::getStatus, param.getStatus());
-        } else {
-            queryWrapper.eq(RenwuInfo::getStatus, QueryField.STATU_NOR);
-        }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
-                    && "asc".equals(param.getOrderByType())) {
-                queryWrapper.orderByAsc(RenwuInfo::getOrderBy);
-            } else {
-                queryWrapper.orderByDesc(RenwuInfo::getOrderBy);
-            }
-        } else {
-            queryWrapper.orderByDesc(RenwuInfo::getCreateDate);
-        }
-        return queryWrapper;
-    }
 
 }
