@@ -144,11 +144,11 @@ public class SysDictTypeController {
     }
     @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(SysDictType sysUser){
+    public AjaxJson page(SysDictType param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<SysDictType> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
+        IPage<SysDictType> page = new Page<>(param.getPageNum(), param.getPageSize());
 
-        IPage<SysDictType> page1 = sysDictTypeService.page(page, new LambdaQueryWrapper<SysDictType>());
+        IPage<SysDictType> page1 = sysDictTypeService.page(page, sysDictTypeService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;

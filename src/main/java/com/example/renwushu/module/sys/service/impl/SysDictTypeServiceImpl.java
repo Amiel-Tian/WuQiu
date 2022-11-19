@@ -85,14 +85,17 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
         if (StringUtils.isNotBlank(param.getDictType())){
             queryWrapper.eq(SysDictType::getDictType, param.getDictType());
         }
+        if (StringUtils.isNotBlank(param.getDictName())){
+            queryWrapper.eq(SysDictType::getDictName, param.getDictName());
+        }
 
         if (param.getStatus() != null) {
             queryWrapper.eq(SysDictType::getStatus, param.getStatus());
         } else {
             queryWrapper.eq(SysDictType::getStatus, QueryField.STATU_NOR);
         }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
+        if (StringUtils.isNotBlank(param.getOrderBy())) {
+            if (StringUtils.isNotBlank(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
                 queryWrapper.orderByAsc(SysDictType::getStatus);
             } else {

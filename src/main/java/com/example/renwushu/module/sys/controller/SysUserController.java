@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.SysUserRole;
@@ -109,6 +110,28 @@ public class SysUserController {
         ajaxJson.setData(result);
         return ajaxJson;
     }
+    @ApiOperation(value = "修改基础信息", notes = "修改基础信息")
+    @RequestMapping(value = "/updateInfo", method = RequestMethod.PUT)
+    public AjaxJson updateInfo(@RequestBody SysUser param) {
+        AjaxJson ajaxJson = new AjaxJson();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        if (StringUtils.isNotBlank(param.getPasswordVer())){
+            SysUser loginUser = sysUserService.getLoginUser();
+            if (!bCryptPasswordEncoder.matches(param.getPasswordVer(),loginUser.getPassword())){
+                return AjaxJson.returnExceptionInfo(StatusCode.USER_LOGIN_PASSWORD_FAIL);
+            }
+            if (StringUtils.isNotBlank(param.getPassword())) {
+                param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+            }
+            boolean result = sysUserService.updateById(param);
+            if (result){
+                sysUserService.clearUserAuthorityInfo(param.getLoginname());
+            }
+            return ajaxJson;
+        }
+        return AjaxJson.returnExceptionInfo(StatusCode.USER_LOGIN_PASSWORD_FAIL);
+    }
     @ApiOperation(value = "逻辑删除", notes = "逻辑删除")
     @RequestMapping(value = "/delete", method = RequestMethod.PUT)
     public AjaxJson delete(@RequestBody SysUser param) {
@@ -168,11 +191,11 @@ public class SysUserController {
     }
     @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(SysUser sysUser){
+    public AjaxJson page(SysUser param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<SysUser> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
+        IPage<SysUser> page = new Page<>(param.getPageNum(), param.getPageSize());
 
-        IPage<SysUser> page1 = sysUserService.page(page, new LambdaQueryWrapper<SysUser>());
+        IPage<SysUser> page1 = sysUserService.page(page, sysUserService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;

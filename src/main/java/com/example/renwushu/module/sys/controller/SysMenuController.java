@@ -166,11 +166,11 @@ public class SysMenuController {
     }
     @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(SysMenu sysUser){
+    public AjaxJson page(SysMenu param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<SysMenu> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
+        IPage<SysMenu> page = new Page<>(param.getPageNum(), param.getPageSize());
 
-        IPage<SysMenu> page1 = sysMenuService.page(page, sysMenuService.createQueryWrapper(sysUser));
+        IPage<SysMenu> page1 = sysMenuService.page(page, sysMenuService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
