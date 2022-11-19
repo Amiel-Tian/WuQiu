@@ -50,6 +50,8 @@ public class SysUser  extends BaseEntity implements Serializable{
 
     @ApiModelProperty("用户邮箱")
     private String email;
+    @ApiModelProperty("电话")
+    private String phone;
 
     @ApiModelProperty("城市")
     private String city;
@@ -75,5 +77,9 @@ public class SysUser  extends BaseEntity implements Serializable{
     @ApiModelProperty("权限列表")
     @TableField(exist = false)
     private List<String> roleIdList;
+
+    @ApiModelProperty("验证密码")
+    @TableField(exist = false)
+    private String passwordVer;
 
 }

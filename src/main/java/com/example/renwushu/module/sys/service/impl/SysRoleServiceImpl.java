@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.dao.SysRoleMapper;
+import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -23,13 +24,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public LambdaQueryWrapper<SysRole> createQueryWrapper(SysRole param){
         LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
 
+        if (StringUtils.isNotBlank(param.getName())) {
+            queryWrapper.like(SysRole::getName, param.getName());
+        }
+        if (StringUtils.isNotBlank(param.getCode())) {
+            queryWrapper.like(SysRole::getCode, param.getCode());
+        }
+
         if (param.getStatus() != null) {
             queryWrapper.eq(SysRole::getStatus, param.getStatus());
         } else {
             queryWrapper.eq(SysRole::getStatus, QueryField.STATU_NOR);
         }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
+        if (StringUtils.isNotBlank(param.getOrderBy())) {
+            if (StringUtils.isNotBlank(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
                 queryWrapper.orderByAsc(SysRole::getStatus);
             } else {

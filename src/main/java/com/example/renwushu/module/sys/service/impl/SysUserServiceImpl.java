@@ -119,13 +119,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public LambdaQueryWrapper<SysUser> createQueryWrapper(SysUser param){
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
 
+        if (StringUtils.isNotBlank(param.getUsername())) {
+            queryWrapper.like(SysUser::getUsername, param.getUsername());
+        }
+        if (StringUtils.isNotBlank(param.getLoginname())) {
+            queryWrapper.like(SysUser::getLoginname, param.getLoginname());
+        }
+
         if (param.getStatus() != null) {
             queryWrapper.eq(SysUser::getStatus, param.getStatus());
         } else {
             queryWrapper.eq(SysUser::getStatus, QueryField.STATU_NOR);
         }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
+        if (StringUtils.isNotBlank(param.getOrderBy())) {
+            if (StringUtils.isNotBlank(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
                 queryWrapper.orderByAsc(SysUser::getStatus);
             } else {

@@ -68,8 +68,8 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataMapper, SysDi
         } else {
 //            queryWrapper.eq(SysDictData::getStatus, QueryField.STATU_NOR);
         }
-        if (StringUtils.isNotEmpty(param.getOrderBy())) {
-            if (StringUtils.isNotEmpty(param.getOrderByType())
+        if (StringUtils.isNotBlank(param.getOrderBy())) {
+            if (StringUtils.isNotBlank(param.getOrderByType())
                     && QueryField.ASC.equals(param.getOrderByType())) {
                 queryWrapper.orderByAsc(SysDictData::getStatus);
             } else {

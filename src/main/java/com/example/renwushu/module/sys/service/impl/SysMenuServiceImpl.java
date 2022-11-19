@@ -5,11 +5,13 @@ import com.example.renwushu.common.QueryField;
 import com.example.renwushu.module.sys.dao.SysUserMapper;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.dao.SysMenuMapper;
+import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
 import com.example.renwushu.module.sys.service.SysMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.module.sys.service.SysUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -107,9 +109,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public LambdaQueryWrapper<SysMenu> createQueryWrapper(SysMenu param){
         LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (param.getParentId() != null) {
+        if (StringUtils.isNotBlank(param.getParentId())) {
             queryWrapper.eq(SysMenu::getParentId, param.getParentId());
         }
+        if (StringUtils.isNotBlank(param.getName())) {
+            queryWrapper.like(SysMenu::getName, param.getName());
+        }
+
         /**/
         if (param.getStatus() != null) {
             queryWrapper.eq(SysMenu::getStatus, param.getStatus());

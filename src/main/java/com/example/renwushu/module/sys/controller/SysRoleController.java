@@ -176,11 +176,11 @@ public class SysRoleController {
     }
     @ApiOperation(value = "分页列表", notes = "分页列表")
     @GetMapping("/page")
-    public AjaxJson page(SysRole sysUser){
+    public AjaxJson page(SysRole param){
         AjaxJson ajaxJson = new AjaxJson();
-        IPage<SysRole> page = new Page<>(sysUser.getPageNum(), sysUser.getPageSize());
+        IPage<SysRole> page = new Page<>(param.getPageNum(), param.getPageSize());
 
-        IPage<SysRole> page1 = sysRoleService.page(page, new LambdaQueryWrapper<SysRole>());
+        IPage<SysRole> page1 = sysRoleService.page(page, sysRoleService.createQueryWrapper(param));
         // 主要演示这里可以加条件。在name不为空的时候执行
         ajaxJson.setData(page1);
         return ajaxJson;
