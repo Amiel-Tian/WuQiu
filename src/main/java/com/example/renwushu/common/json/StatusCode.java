@@ -17,6 +17,7 @@ public enum StatusCode {
     USER_LOGIN_NAME_FAIL("113", "登录失败，用户名错误"),
     USER_LOGIN_FORBID("114", "用户被禁止登录"),
     USER_LOGINOUT_SUCESS("115", "退出登录成功"),
+    USER_LOGINNAME_FAIL("116", "用户登录名重复"),
 
     USER_TOKEN_ERRO("120", "TOKEN验证错误"),
     USER_TOKEN_INVALID("121", "TOKEN验证失效"),

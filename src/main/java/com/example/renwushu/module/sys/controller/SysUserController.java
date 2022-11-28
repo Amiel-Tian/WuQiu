@@ -49,8 +49,12 @@ public class SysUserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public AjaxJson save(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
-//        param.setCreateBy();
-//        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        SysUser one = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getLoginname, param.getLoginname()));
+        if (one != null){
+            return AjaxJson.returnExceptionInfo(StatusCode.USER_LOGINNAME_FAIL);
+        }
+
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         param.setId(IdHelp.UUID());
@@ -85,6 +89,12 @@ public class SysUserController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public AjaxJson update(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
+        SysUser one = sysUserService.getOne(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getLoginname, param.getLoginname())
+                .ne(SysUser::getId, param.getId()));
+        if (one != null){
+            return AjaxJson.returnExceptionInfo(StatusCode.USER_LOGINNAME_FAIL);
+        }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         if (StringUtils.isNotBlank(param.getPassword())) {
@@ -115,7 +125,12 @@ public class SysUserController {
     public AjaxJson updateInfo(@RequestBody SysUser param) {
         AjaxJson ajaxJson = new AjaxJson();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
+        SysUser one = sysUserService.getOne(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getLoginname, param.getLoginname())
+                .ne(SysUser::getId, param.getId()));
+        if (one != null){
+            return AjaxJson.returnExceptionInfo(StatusCode.USER_LOGINNAME_FAIL);
+        }
         if (StringUtils.isNotBlank(param.getPasswordVer())){
             SysUser loginUser = sysUserService.getLoginUser();
             if (!bCryptPasswordEncoder.matches(param.getPasswordVer(),loginUser.getPassword())){
