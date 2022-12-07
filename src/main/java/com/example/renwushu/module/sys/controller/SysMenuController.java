@@ -97,9 +97,9 @@ public class SysMenuController {
             /*
              * 删除权限
              * */
-            LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
-            queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
-            sysRoleMenuService.remove(queryWrapper);
+//            LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper();
+//            queryWrapper.eq(SysRoleMenu :: getMenuId, param.getId());
+//            sysRoleMenuService.remove(queryWrapper);
         }
         ajaxJson.setData(result);
         return ajaxJson;
