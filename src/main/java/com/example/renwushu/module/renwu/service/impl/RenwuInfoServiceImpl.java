@@ -51,7 +51,7 @@ public class RenwuInfoServiceImpl extends ServiceImpl<RenwuInfoMapper, RenwuInfo
                 queryWrapper.orderByDesc(RenwuInfo::getOrderBy);
             }
         } else {
-            queryWrapper.orderByDesc(RenwuInfo::getCreateDate);
+            queryWrapper.orderByAsc(RenwuInfo::getStartDate);
         }
         return queryWrapper;
     }
