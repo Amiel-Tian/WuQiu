@@ -1,4 +1,4 @@
-package com.example.renwushu.module.renwu.entity;
+package com.example.renwushu.module.renwushu.renwu.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

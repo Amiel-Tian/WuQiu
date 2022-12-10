@@ -1,9 +1,9 @@
-package com.example.renwushu.module.renwu.service.impl;
+package com.example.renwushu.module.renwushu.renwu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.renwushu.module.renwu.entity.RenwuProject;
-import com.example.renwushu.module.renwu.dao.RenwuProjectMapper;
-import com.example.renwushu.module.renwu.service.RenwuProjectService;
+import com.example.renwushu.module.renwushu.renwu.entity.RenwuProject;
+import com.example.renwushu.module.renwushu.renwu.dao.RenwuProjectMapper;
+import com.example.renwushu.module.renwushu.renwu.service.RenwuProjectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

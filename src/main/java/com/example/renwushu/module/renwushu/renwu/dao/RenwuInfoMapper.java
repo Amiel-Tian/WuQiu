@@ -1,6 +1,6 @@
-package com.example.renwushu.module.renwu.dao;
+package com.example.renwushu.module.renwushu.renwu.dao;
 
-import com.example.renwushu.module.renwu.entity.RenwuInfo;
+import com.example.renwushu.module.renwushu.renwu.entity.RenwuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

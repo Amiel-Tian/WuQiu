@@ -1,7 +1,7 @@
-package com.example.renwushu.module.renwu.service;
+package com.example.renwushu.module.renwushu.renwu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.renwushu.module.renwu.entity.RenwuInfo;
+import com.example.renwushu.module.renwushu.renwu.entity.RenwuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

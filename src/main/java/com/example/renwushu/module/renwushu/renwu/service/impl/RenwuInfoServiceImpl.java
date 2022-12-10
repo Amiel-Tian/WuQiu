@@ -1,10 +1,10 @@
-package com.example.renwushu.module.renwu.service.impl;
+package com.example.renwushu.module.renwushu.renwu.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.common.QueryField;
-import com.example.renwushu.module.renwu.entity.RenwuInfo;
-import com.example.renwushu.module.renwu.dao.RenwuInfoMapper;
-import com.example.renwushu.module.renwu.service.RenwuInfoService;
+import com.example.renwushu.module.renwushu.renwu.entity.RenwuInfo;
+import com.example.renwushu.module.renwushu.renwu.dao.RenwuInfoMapper;
+import com.example.renwushu.module.renwushu.renwu.service.RenwuInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.utils.ToolUtil;
 import org.apache.commons.lang3.StringUtils;

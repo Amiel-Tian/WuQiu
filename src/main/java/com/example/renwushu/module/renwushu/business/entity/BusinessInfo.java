@@ -1,18 +1,18 @@
-package com.example.renwushu.module.renwu.entity;
+package com.example.renwushu.module.renwushu.business.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.example.renwushu.common.base.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.renwushu.module.sys.entity.SysMenu;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -20,43 +20,27 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author RedStar
- * @since 2022-11-03
+ * @since 2022-12-09
  */
 @Getter
 @Setter
-@Accessors(chain = true)
-@TableName("n_renwu_info")
-@ApiModel(value = "RenwuInfo对象", description = "")
-public class RenwuInfo extends BaseEntity implements Serializable {
+@TableName("n_business_info")
+@ApiModel(value = "BusinessInfo对象", description = "")
+public class BusinessInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("主键")
     private String id;
 
-    @ApiModelProperty("开始时间")
-    private Date startDate;
+    @ApiModelProperty("业务名称")
+    private String name;
 
-    @ApiModelProperty("结束时间")
-    private Date endDate;
-
-    @ApiModelProperty("客户名称")
-    private String customerName;
-
-    @ApiModelProperty("合同编号")
-    private String contractNo;
-
-    @ApiModelProperty("申请人")
-    private String applicant;
-
-    @ApiModelProperty("接收人")
-    private String recipient;
-
-    @ApiModelProperty("工作时长")
-    private Integer workTime;
+    @ApiModelProperty("父id")
+    private String parentId;
 
     @ApiModelProperty("内容")
-    private String context;
+    private String content;
 
     @ApiModelProperty("备注")
     private String remark;
@@ -85,10 +69,10 @@ public class RenwuInfo extends BaseEntity implements Serializable {
     @ApiModelProperty("状态")
     private Integer status;
 
-    @TableField(exist = false)
-    private String year;
-    @TableField(exist = false)
-    private String month;
+    @ApiModelProperty("排序")
+    private Integer sort;
 
 
+    @TableField(exist = false)
+    private List<BusinessInfo> children = new ArrayList<>();
 }
