@@ -6,7 +6,7 @@ spring:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/wq_renwushu?tinyInt1isBit=false&useUnicode=true&autoReconnect=true&useSSL=false&characterEncoding=UTF8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
     username: root
-    password: 329471
+    password: 3294
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    长时间不访问报错
     hikari:
