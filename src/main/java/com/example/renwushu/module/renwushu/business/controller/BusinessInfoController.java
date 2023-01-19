@@ -137,8 +137,8 @@ public class BusinessInfoController {
     @GetMapping("/treeData")
     @ResponseBody
     public AjaxJson treeData() {
-        Map map = new HashMap();
-        return new AjaxJson().setData(businessInfoService.getTreeData());
+        SysUser loginUser = sysUserService.getLoginUser();
+        return new AjaxJson().setData(businessInfoService.getTreeData(loginUser));
     }
 
 }

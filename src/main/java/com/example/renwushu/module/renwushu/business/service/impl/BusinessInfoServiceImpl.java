@@ -7,8 +7,7 @@ import com.example.renwushu.module.renwushu.business.dao.BusinessInfoMapper;
 import com.example.renwushu.module.renwushu.business.entity.dto.BusinessInfoDto;
 import com.example.renwushu.module.renwushu.business.service.BusinessInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.renwushu.module.sys.entity.SysMenu;
-import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
+import com.example.renwushu.module.sys.entity.SysUser;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,10 +34,12 @@ public class BusinessInfoServiceImpl extends ServiceImpl<BusinessInfoMapper, Bus
     }
 
     @Override
-    public List<BusinessInfoDto> getTreeData() {
+    public List<BusinessInfoDto> getTreeData(SysUser loginUser) {
         // 获取所有菜单
         LambdaQueryWrapper<BusinessInfo> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(BusinessInfo::getStatus, QueryField.STATU_NOR_);
+        queryWrapper.and(wrapper -> wrapper.eq(BusinessInfo::getBusinessStatus , "public")
+                .or().eq(BusinessInfo::getCreateBy, loginUser.getId()));
         List<BusinessInfo> sysMenus = list(queryWrapper);
         List<BusinessInfo> collect = sysMenus.stream().sorted(Comparator.comparing(BusinessInfo::getSort,Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
 
