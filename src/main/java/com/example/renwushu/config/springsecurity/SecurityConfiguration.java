@@ -1,10 +1,10 @@
 package com.example.renwushu.config.springsecurity;
 
 import com.example.renwushu.config.springsecurity.common.*;
-import com.example.renwushu.config.springsecurity.jtw.*;
+import com.example.renwushu.config.springsecurity.jtw.CaptchaFilter;
+import com.example.renwushu.config.springsecurity.jtw.JwtAuthenticationFilter;
 import com.example.renwushu.config.springsecurity.service.UserService;
 import com.example.renwushu.utils.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +21,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.annotation.Resource;
+
 
 /*
  * Security配置
@@ -29,24 +31,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity    // 添加 security 过滤器
 @EnableGlobalMethodSecurity(prePostEnabled = true)    // 启用方法级别的权限认证
 public class SecurityConfiguration {
-    @Autowired
+    @Resource
     private JwtAuthenticationEntryPoint authenticationEntryPoint;
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
-    @Autowired
+    @Resource
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    @Autowired
+    @Resource
     private LoginSuccessHandler loginSuccessHandler;
-    @Autowired
+    @Resource
     private LoginFailureHandler loginFailureHandler;
-    @Autowired
+    @Resource
     private  CaptchaFilter captchaFilter;
-    @Autowired
+    @Resource
     private JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
 
-    @Autowired
+    @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private JwtUtil jwtUtil;
     //白名单
     public static final String[] URL_WHITELIST = {
@@ -59,6 +61,7 @@ public class SecurityConfiguration {
             "/captcha",
             "/login",
             "/logout",
+            "/websocket/**",
     };
 
     /*
