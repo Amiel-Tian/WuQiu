@@ -2,30 +2,24 @@ package com.example.renwushu.module.sys.controller;
 
 
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.module.sys.entity.SysMenu;
-import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysRoleMenu;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysMenuService;
 import com.example.renwushu.module.sys.service.SysRoleMenuService;
-import com.example.renwushu.module.sys.service.SysRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
-import java.security.Principal;
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -40,12 +34,12 @@ import java.util.*;
 @ResponseBody
 @RequestMapping("/sysMenu")
 public class SysMenuController {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SysRoleMenuService sysRoleMenuService;
 
-    @Autowired
+    @Resource
     private SysMenuService sysMenuService;
     /**
      * 获取当前用户的菜单栏以及权限

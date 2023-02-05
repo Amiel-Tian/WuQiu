@@ -1,21 +1,20 @@
 package com.example.renwushu.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.common.QueryField;
+import com.example.renwushu.module.sys.dao.SysMenuMapper;
 import com.example.renwushu.module.sys.dao.SysUserMapper;
 import com.example.renwushu.module.sys.entity.SysMenu;
-import com.example.renwushu.module.sys.dao.SysMenuMapper;
-import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
 import com.example.renwushu.module.sys.service.SysMenuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.module.sys.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,10 +30,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
 
-    @Autowired
+    @Resource
     private SysUserMapper sysUserMapper;
 
     @Override

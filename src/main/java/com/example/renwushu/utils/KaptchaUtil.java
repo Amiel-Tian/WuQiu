@@ -6,9 +6,9 @@ import cn.hutool.core.map.MapUtil;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -18,9 +18,9 @@ import java.util.Map;
 @Slf4j
 @Component
 public class KaptchaUtil {
-    @Autowired
+    @Resource
     private Producer producer;
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
 
     public Map getCaptcha() throws IOException {
@@ -33,7 +33,7 @@ public class KaptchaUtil {
         String str = "data:image/jpeg;base64,";
         String base64Img = str + encoder.encode(outputStream.toByteArray());
         // 存储到redis中
-        redisUtil.set(key, code);
+        redisUtil.set(key, code, 60 * 5);
 
         log.info("验证码 --- {}---{}", key, code);
         return MapUtil.builder().put("token", key).put("base64Img", base64Img).build();

@@ -4,25 +4,21 @@ package com.example.renwushu.module.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
-import com.example.renwushu.module.sys.entity.*;
 import com.example.renwushu.module.sys.entity.SysRole;
-import com.example.renwushu.module.sys.entity.SysRole;
+import com.example.renwushu.module.sys.entity.SysRoleMenu;
+import com.example.renwushu.module.sys.entity.SysUserRole;
 import com.example.renwushu.module.sys.service.SysRoleMenuService;
 import com.example.renwushu.module.sys.service.SysRoleService;
 import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.ListUtils;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +36,13 @@ import java.util.stream.Collectors;
 @ResponseBody
 @RequestMapping("/sysRole")
 public class SysRoleController {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SysRoleService sysRoleService;
-    @Autowired
+    @Resource
     private SysUserRoleService sysUserRoleService;
-    @Autowired
+    @Resource
     private SysRoleMenuService sysRoleMenuService;
 
     @ApiOperation(value = "新增", notes = "新增")

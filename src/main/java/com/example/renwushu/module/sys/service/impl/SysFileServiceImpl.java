@@ -11,10 +11,10 @@ import com.example.renwushu.utils.IdHelp;
 import com.example.renwushu.utils.MinioUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -28,12 +28,12 @@ import java.util.List;
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
     private final Log log = LogFactory.getLog(SysFileController.class);
-    @Autowired
+    @Resource
     private SysFileMapper sysFileMapper;
 
-    @Autowired
+    @Resource
     private MinioUtil minioUtil;
-    @Autowired
+    @Resource
     private MinioProperties minioProperties;
 
     public UploadResponse uploadAttachment(MultipartFile file) throws Exception {

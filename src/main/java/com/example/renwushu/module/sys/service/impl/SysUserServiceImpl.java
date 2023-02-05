@@ -2,22 +2,22 @@ package com.example.renwushu.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.common.QueryField;
+import com.example.renwushu.module.sys.dao.SysUserMapper;
 import com.example.renwushu.module.sys.entity.SysMenu;
 import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
-import com.example.renwushu.module.sys.dao.SysUserMapper;
 import com.example.renwushu.module.sys.service.SysMenuService;
 import com.example.renwushu.module.sys.service.SysRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
-    @Autowired
+    @Resource
     private SysRoleService sysRoleService;
-    @Autowired
+    @Resource
     private SysMenuService sysMenuService;
-    @Autowired
+    @Resource
     private SysUserMapper sysUserMapper;
 
     @Override

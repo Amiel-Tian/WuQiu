@@ -7,22 +7,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
-import com.example.renwushu.module.sys.entity.SysRole;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.SysUserRole;
-import com.example.renwushu.module.sys.service.SysRoleService;
 import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.ListUtils;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +37,9 @@ import java.util.stream.Collectors;
 @ResponseBody
 @RequestMapping("/sysUser")
 public class SysUserController {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SysUserRoleService sysUserRoleService;
 
     @ApiOperation(value = "新增", notes = "新增")

@@ -1,22 +1,21 @@
 package com.example.renwushu.module.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.renwushu.common.QueryField;
+import com.example.renwushu.module.sys.dao.SysDictTypeMapper;
 import com.example.renwushu.module.sys.entity.SysDictData;
 import com.example.renwushu.module.sys.entity.SysDictType;
-import com.example.renwushu.module.sys.dao.SysDictTypeMapper;
 import com.example.renwushu.module.sys.entity.dto.SysDictDto;
 import com.example.renwushu.module.sys.service.SysDictDataService;
 import com.example.renwushu.module.sys.service.SysDictTypeService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDictType> implements SysDictTypeService {
-    @Autowired
+    @Resource
     SysDictDataService sysDictDataService;
 
     @Override
