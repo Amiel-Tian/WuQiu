@@ -12,11 +12,10 @@ import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +33,9 @@ import java.util.Map;
 @RequestMapping("/renwuProject")
 @Api(tags = "任务书项目",  value = "renwuProject")
 public class RenwuProjectController {
-    @Autowired
+    @Resource
     private RenwuProjectService renwuProjectService;
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
 
     @ApiOperation(value = "新增", notes = "新增")
