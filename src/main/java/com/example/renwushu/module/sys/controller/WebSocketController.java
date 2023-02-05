@@ -1,26 +1,32 @@
 package com.example.renwushu.module.sys.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.example.renwushu.config.webSocket.NetgateHandler;
 import com.example.renwushu.module.sys.entity.SysUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.renwushu.module.sys.entity.dto.WebSocketDto;
+import com.example.renwushu.module.sys.service.SysUserService;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.TextMessage;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
+import java.util.Date;
 
 @RestController
+@ResponseBody
 @RequestMapping("/webSocket")
 public class WebSocketController {
-    @Autowired
+    @Resource
     private NetgateHandler webSocketHandler;
+    @Resource
+    private SysUserService sysUserService;
 
     @PostMapping("/sentMessage")
-    public void sentMessage(String userId,String message){
+    public void sentMessage(@RequestBody WebSocketDto param){
         try {
-            webSocketHandler.sendMessageToUser(userId,new TextMessage(message));
-            ArrayList<SysUser> a = new ArrayList<SysUser>();
+            SysUser loginUser = sysUserService.getLoginUser();
+            param.setSendId(loginUser.getId());
+            param.setSendDate(new Date());
+            webSocketHandler.sendMessageToUser(param.getReceiveId(),new TextMessage(JSON.toJSONString(param)));
         } catch (Exception e) {
             e.printStackTrace();
         }

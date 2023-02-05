@@ -4,13 +4,12 @@ import cn.hutool.json.JSONUtil;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.utils.JwtUtil;
-import com.sun.xml.txw2.output.ResultFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ import java.io.IOException;
 @Component
 public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
 
-    @Autowired
+    @Resource
     private JwtUtil jwtUtil;
 
     @Override

@@ -5,11 +5,11 @@ import com.example.renwushu.config.minio.UploadResponse;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -22,10 +22,10 @@ import java.util.Optional;
 @Component
 public class MinioUtil {
 
-    @Autowired
+    @Resource
     private MinioProperties minioProperties;
 
-    @Autowired
+    @Resource
     private MinioClient client;
 
     /**

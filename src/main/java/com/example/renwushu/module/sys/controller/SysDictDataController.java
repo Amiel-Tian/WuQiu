@@ -8,18 +8,16 @@ import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysDictData;
-import com.example.renwushu.module.sys.entity.SysDictType;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysDictDataService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +35,9 @@ import java.util.Map;
 @RequestMapping("/sysDictData")
 public class SysDictDataController {
 
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SysDictDataService sysDictDataService;
 
     @ApiOperation(value = "新增", notes = "新增")

@@ -8,13 +8,12 @@ import com.example.renwushu.module.sys.entity.dto.LoginParam;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.KaptchaUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,9 +23,9 @@ import java.util.Map;
 @Slf4j
 @RestController
 public class AuthController extends BaseController {
-    @Autowired
+    @Resource
     private KaptchaUtil kaptchaUtil;
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
 
     /**

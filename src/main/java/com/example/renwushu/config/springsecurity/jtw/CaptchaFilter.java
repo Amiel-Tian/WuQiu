@@ -6,11 +6,11 @@ import com.example.renwushu.utils.KaptchaUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +21,11 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class CaptchaFilter extends OncePerRequestFilter{
-    @Autowired
+    @Resource
     private JwtUtil jwtUtil;
-    @Autowired
+    @Resource
     private KaptchaUtil kaptchaUtil;
-    @Autowired
+    @Resource
     private  LoginFailureHandler loginFailureHandler;
 
     @Override

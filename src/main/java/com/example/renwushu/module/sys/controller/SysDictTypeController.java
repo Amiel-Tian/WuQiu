@@ -11,18 +11,16 @@ import com.example.renwushu.module.sys.entity.SysDictData;
 import com.example.renwushu.module.sys.entity.SysDictType;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.entity.dto.SysDictDto;
-import com.example.renwushu.module.sys.entity.dto.SysMenuDto;
 import com.example.renwushu.module.sys.service.SysDictDataService;
 import com.example.renwushu.module.sys.service.SysDictTypeService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +37,11 @@ import java.util.Map;
 @ResponseBody
 @RequestMapping("/sysDictType")
 public class SysDictTypeController {
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SysDictTypeService sysDictTypeService;
-    @Autowired
+    @Resource
     private SysDictDataService sysDictDataService;
     @ApiOperation(value = "获取字典树", notes = "获取字典树")
     @RequestMapping(value = "/getTreeDict", method = RequestMethod.GET)

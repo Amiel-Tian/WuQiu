@@ -9,19 +9,19 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
 @RequestMapping("/sysFile")
 @Api(tags = "SysFileCOntroller",  value = "文件表")
 public class SysFileController {
-    @Autowired
+    @Resource
     private SysFileService sysFileService;
 
     private final Log log = LogFactory.getLog(SysFileController.class);
