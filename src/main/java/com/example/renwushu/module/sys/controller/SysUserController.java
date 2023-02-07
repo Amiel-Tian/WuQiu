@@ -4,11 +4,12 @@ package com.example.renwushu.module.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysUser;
+import com.example.renwushu.module.sys.entity.SysUserOrgan;
 import com.example.renwushu.module.sys.entity.SysUserRole;
+import com.example.renwushu.module.sys.service.SysUserOrganService;
 import com.example.renwushu.module.sys.service.SysUserRoleService;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
@@ -41,6 +42,8 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Resource
     private SysUserRoleService sysUserRoleService;
+    @Resource
+    private SysUserOrganService sysUserOrganService;
 
     @ApiOperation(value = "新增", notes = "新增")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -53,25 +56,10 @@ public class SysUserController {
         }
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-        param.setId(IdHelp.UUID());
-        param.setStatus(QueryField.STATU_NOR_);
         if (StringUtils.isNotBlank(param.getPassword())) {
             param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         }
-        if (!ListUtils.isEmpty(param.getRoleIdList() )){
-            LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<SysUserRole>();
-            queryWrapper.eq(SysUserRole::getUserId, param.getId());
-            sysUserRoleService.remove(queryWrapper);
-
-            for (String s : param.getRoleIdList()) {
-                SysUserRole sysUserRole = new SysUserRole();
-                sysUserRole.setId(IdHelp.UUID());
-                sysUserRole.setUserId(param.getId());
-                sysUserRole.setRoleId(s);
-                sysUserRoleService.save(sysUserRole);
-            }
-        }
+        otherUpdate(param);
 
         boolean result = sysUserService.save(param);
         if (result){
@@ -97,6 +85,16 @@ public class SysUserController {
         if (StringUtils.isNotBlank(param.getPassword())) {
             param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         }
+        otherUpdate(param);
+
+        boolean result = sysUserService.updateById(param);
+        if (result){
+            sysUserService.clearUserAuthorityInfo(param.getLoginname());
+        }
+        ajaxJson.setData(result);
+        return ajaxJson;
+    }
+    private void otherUpdate(SysUser param){
         if (!ListUtils.isEmpty(param.getRoleIdList() )){
             LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper<SysUserRole>();
             queryWrapper.eq(SysUserRole::getUserId, param.getId());
@@ -110,12 +108,20 @@ public class SysUserController {
                 sysUserRoleService.save(sysUserRole);
             }
         }
-        boolean result = sysUserService.updateById(param);
-        if (result){
-            sysUserService.clearUserAuthorityInfo(param.getLoginname());
+
+        if (!ListUtils.isEmpty(param.getOrganIdList() )){
+            LambdaQueryWrapper<SysUserOrgan> queryWrapper = new LambdaQueryWrapper<SysUserOrgan>();
+            queryWrapper.eq(SysUserOrgan::getUserId, param.getId());
+            sysUserOrganService.remove(queryWrapper);
+
+            for (String s : param.getOrganIdList()) {
+                SysUserOrgan sysUserOrgan = new SysUserOrgan();
+                sysUserOrgan.setId(IdHelp.UUID());
+                sysUserOrgan.setUserId(param.getId());
+                sysUserOrgan.setOrganId(s);
+                sysUserOrganService.save(sysUserOrgan);
+            }
         }
-        ajaxJson.setData(result);
-        return ajaxJson;
     }
     @ApiOperation(value = "修改基础信息", notes = "修改基础信息")
     @RequestMapping(value = "/updateInfo", method = RequestMethod.PUT)
@@ -169,6 +175,12 @@ public class SysUserController {
         LambdaQueryWrapper<SysUserRole> queryWrapper = new LambdaQueryWrapper();
         queryWrapper.eq(SysUserRole :: getUserId, param.getId());
         sysUserRoleService.remove(queryWrapper);
+        /*
+         * 同步清空组织用户表
+         * */
+        LambdaQueryWrapper<SysUserOrgan> queryWrapper1 = new LambdaQueryWrapper();
+        queryWrapper1.eq(SysUserOrgan :: getUserId, param.getId());
+        sysUserOrganService.remove(queryWrapper1);
 
         if (result){
             sysUserService.clearUserAuthorityInfo(param.getLoginname());
@@ -187,6 +199,12 @@ public class SysUserController {
         List<SysUserRole> list = sysUserRoleService.list(queryWrapper);
         if (!ListUtils.isEmpty(list)){
             result.setRoleIdList(list.stream().map(SysUserRole::getRoleId).collect(Collectors.toList()));
+        }
+        LambdaQueryWrapper<SysUserOrgan> queryWrapper1 = new LambdaQueryWrapper<SysUserOrgan>();
+        queryWrapper1.eq(SysUserOrgan::getUserId, id);
+        List<SysUserOrgan> list1 = sysUserOrganService.list(queryWrapper1);
+        if (!ListUtils.isEmpty(list1)){
+            result.setOrganIdList(list1.stream().map(SysUserOrgan::getOrganId).collect(Collectors.toList()));
         }
 
         ajaxJson.setData(result);

@@ -1,12 +1,9 @@
 package com.example.renwushu.module.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.renwushu.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -14,6 +11,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -77,6 +78,10 @@ public class SysUser  extends BaseEntity implements Serializable{
     @ApiModelProperty("权限列表")
     @TableField(exist = false)
     private List<String> roleIdList;
+
+    @ApiModelProperty("组织列表")
+    @TableField(exist = false)
+    private List<String> organIdList;
 
     @ApiModelProperty("验证密码")
     @TableField(exist = false)
