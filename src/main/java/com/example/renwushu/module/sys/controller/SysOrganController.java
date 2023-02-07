@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Controller
 @ResponseBody
-@RequestMapping("/SysOrgan")
+@RequestMapping("/sysOrgan")
 public class SysOrganController {
     @Resource
     private SysUserService sysUserService;
