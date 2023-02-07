@@ -1,7 +1,7 @@
 server:
-  port: 2200
+  port: 2201
   servlet:
-    context-path: /renwushu
+    context-path: /chat
 
 #mysql数据库配置 ?serverTimezone=GMT%2B8
 spring:
