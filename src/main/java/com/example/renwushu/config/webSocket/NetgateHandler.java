@@ -53,6 +53,7 @@ public class NetgateHandler extends TextWebSocketHandler {
             //心跳消息过滤掉
             return;
         } else {
+            session.sendMessage(message);
             //转发成mqtt消息
             String topic = "pay/" + pid + "/server/" + sn;
             log.info(topic);
@@ -154,15 +155,13 @@ public class NetgateHandler extends TextWebSocketHandler {
     public void sendMessageToUser(String userId, TextMessage message) {
         for (ConcurrentHashMap<String, WebSocketSession> netgate : netgates.values()){
             WebSocketSession ws = netgate.get(userId);
-            if (ws != null){
-                try {
-                    if (ws.isOpen()) {
-                        ws.sendMessage(message);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
+            if(ws == null){
+                return;
+            }
+            try {
+                this.handleTextMessage(ws, message);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -177,13 +176,10 @@ public class NetgateHandler extends TextWebSocketHandler {
             for (WebSocketSession ws : netgate.values()) {
                 if (ws != null && userIds.indexOf(ws.getId()) > -1){
                     try {
-                        if (ws.isOpen()) {
-                            ws.sendMessage(message);
-                        }
-                    } catch (IOException e) {
+                        this.handleTextMessage(ws, message);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    break;
                 }
             }
         }

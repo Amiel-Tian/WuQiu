@@ -2,7 +2,6 @@ package com.example.renwushu.common;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import org.junit.Test;
@@ -19,15 +18,14 @@ public class CodeGenerator {
         // 数据库用户名和密码
         String username = "root";
 //        String password = "amiel@3294";
-        String password = "329471";
+        String password = "3294";
         // 代码生成模块地址
         String moudlePath = System.getProperty("user.dir") + "/gen/src/main/java";
         // xml文件生成地址
         String xmlPath = System.getProperty("user.dir") + "/gen/src/main/resources/mapper";
         // 需要生成的数据表
         String[] tableArr = new String[]{
-                "sys_dict_data",
-                "sys_dict_type",
+                "sys_websocket",
         };
 
         FastAutoGenerator.create(url, username, password)
@@ -40,7 +38,7 @@ public class CodeGenerator {
                             .outputDir(moudlePath); // 指定输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.example.renwushu.module.renwu") // 设置模块名
+                    builder.parent("com.example.renwushu.module.sys") // 设置模块名
                             .mapper("dao") // 设置mapper包名
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml, xmlPath)); // 设置xml文件生成目录
                 })
