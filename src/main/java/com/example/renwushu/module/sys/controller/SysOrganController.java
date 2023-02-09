@@ -41,11 +41,18 @@ public class SysOrganController {
     @Resource
     private SysOrganService sysOrganService;
 
-    @GetMapping("/navAll")
+    @GetMapping("/treeAll")
     @ResponseBody
-    public AjaxJson navAll() {
+    public AjaxJson treeAll() {
         Map map = new HashMap();
-        map.put("nav", sysOrganService.getNavAll());
+        map.put("nav", sysOrganService.getTreeAll());
+        return new AjaxJson().setData(map);
+    }
+    @GetMapping("/treeAllAndUser")
+    @ResponseBody
+    public AjaxJson treeAllAndUser() {
+        Map map = new HashMap();
+        map.put("nav", sysOrganService.getTreeAllAndUser());
         return new AjaxJson().setData(map);
     }
 

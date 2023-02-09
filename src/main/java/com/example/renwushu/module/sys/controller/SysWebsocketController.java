@@ -4,8 +4,10 @@ package com.example.renwushu.module.sys.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.renwushu.common.json.AjaxJson;
+import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.config.webSocket.NetgateHandler;
 import com.example.renwushu.module.sys.entity.SysWebsocket;
+import com.example.renwushu.module.sys.entity.dto.SysWebSocketDto;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.module.sys.service.SysWebsocketService;
 import com.example.renwushu.utils.IdHelp;
@@ -45,7 +47,10 @@ public class SysWebsocketController {
             }
             param.setId(IdHelp.UUID());
             sysWebsocketService.save(param);
-            webSocketHandler.sendMessageToUser(param.getReceiveId(),new TextMessage(JSON.toJSONString(param)));
+            AjaxJson ajaxJson = new AjaxJson();
+            ajaxJson.setStatusCode(StatusCode.SUCESS);
+            ajaxJson.setData(new SysWebSocketDto().setType("websocketMessage").setData(param));
+            webSocketHandler.sendMessageToUser(param.getReceiveId(),new TextMessage(JSON.toJSONString(ajaxJson)));
         } catch (Exception e) {
             e.printStackTrace();
         }
