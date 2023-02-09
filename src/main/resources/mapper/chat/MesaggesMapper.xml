@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.renwushu.module.chat.messages.dao.MessagesMapper">
+
+
+    <select id="userRecord" resultType="com.example.renwushu.module.sys.entity.SysUser">
+        SELECT a.id,
+               username
+        FROM sys_user a
+                 RIGHT JOIN (
+            SELECT id
+            FROM (
+                     SELECT *,
+                            row_number() over ( PARTITION BY id ORDER BY send_date DESC ) AS lastIndexCreated
+                     FROM (SELECT receive_id AS id, send_date
+                           FROM n_messages
+                           WHERE send_id = #{id,jdbcType=VARCHAR}
+                           UNION ALL
+                           SELECT send_id AS id, send_date
+                           FROM n_messages
+                           WHERE receive_id = #{id,jdbcType=VARCHAR}) T
+                     ORDER BY send_date DESC
+                 ) T
+            WHERE lastIndexCreated = 1
+        ) b ON a.id = b.id
+    </select>
+</mapper>
