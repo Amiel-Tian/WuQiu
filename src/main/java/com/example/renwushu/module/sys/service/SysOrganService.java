@@ -15,7 +15,9 @@ import java.util.List;
  * @since 2023-02-05
  */
 public interface SysOrganService extends IService<SysOrgan> {
-    List<SysOrgan> getNavAll();
+    List<SysOrgan> getTreeAll();
+
+    List<SysOrgan> getTreeAllAndUser();
 
     LambdaQueryWrapper<SysOrgan> createQueryWrapper(SysOrgan param);
 }

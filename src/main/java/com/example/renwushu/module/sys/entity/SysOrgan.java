@@ -59,5 +59,8 @@ public class SysOrgan extends BaseEntity implements Serializable {
     private Integer sort;
 
     @TableField(exist = false)
+    private String userId;
+
+    @TableField(exist = false)
     private List<SysOrgan> children = new ArrayList<>();
 }
