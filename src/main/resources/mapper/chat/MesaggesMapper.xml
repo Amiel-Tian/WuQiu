@@ -5,10 +5,13 @@
 
     <select id="userRecord" resultType="com.example.renwushu.module.sys.entity.SysUser">
         SELECT a.id,
-               username
+               username,
+               a.type,
+               a.users,
+               b.send_date as createdTime
         FROM sys_user a
                  RIGHT JOIN (
-            SELECT id
+            SELECT id, send_date
             FROM (
                      SELECT *,
                             row_number() over ( PARTITION BY id ORDER BY send_date DESC ) AS lastIndexCreated
@@ -18,7 +21,18 @@
                            UNION ALL
                            SELECT send_id AS id, send_date
                            FROM n_messages
-                           WHERE receive_id = #{id,jdbcType=VARCHAR}) T
+                           WHERE receive_id = #{id,jdbcType=VARCHAR}
+                           UNION ALL
+                           SELECT send_id AS id,
+                                  send_date
+                           FROM n_messages
+                           WHERE send_id IN (SELECT id FROM sys_user WHERE users LIKE CONCAT('%',#{id},'%'))
+                           UNION ALL
+                           SELECT receive_id AS id,
+                                  send_date
+                           FROM n_messages
+                           WHERE receive_id IN (SELECT id FROM sys_user WHERE users LIKE CONCAT('%',#{id},'%'))
+                          ) T
                      ORDER BY send_date DESC
                  ) T
             WHERE lastIndexCreated = 1

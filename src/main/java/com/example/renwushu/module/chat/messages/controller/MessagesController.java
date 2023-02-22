@@ -3,6 +3,8 @@ package com.example.renwushu.module.chat.messages.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.config.webSocket.NetgateHandler;
@@ -10,7 +12,6 @@ import com.example.renwushu.module.chat.messages.dao.MessagesMapper;
 import com.example.renwushu.module.chat.messages.entity.Messages;
 import com.example.renwushu.module.chat.messages.service.MessagesService;
 import com.example.renwushu.module.sys.entity.SysUser;
-import com.example.renwushu.module.sys.entity.dto.SysWebSocketDto;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.TextMessage;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,9 +55,13 @@ public class MessagesController {
             param.setId(IdHelp.UUID());
             messagesService.save(param);
             AjaxJson ajaxJson = new AjaxJson();
-            ajaxJson.setStatusCode(StatusCode.SUCESS);
-            ajaxJson.setData(new SysWebSocketDto().setType("message").setData(param));
-            webSocketHandler.sendMessageToUser(param.getReceiveId(),new TextMessage(JSON.toJSONString(ajaxJson)));
+            ajaxJson.setStatusCode(StatusCode.MESSAGE_MES);
+            ajaxJson.setData(param);
+            if (StringUtils.isNotBlank(param.getType()) && param.getType().equals("group")){
+                webSocketHandler.sendMessageToUsers(new ArrayList<>(Arrays.asList(param.getUsers().split(","))),new TextMessage(JSON.toJSONString(ajaxJson)));
+            }else {
+                webSocketHandler.sendMessageToUser(param.getReceiveId(), new TextMessage(JSON.toJSONString(ajaxJson)));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,6 +87,16 @@ public class MessagesController {
         LambdaQueryWrapper<Messages> queryWrapper = messagesService.createQueryWrapper(param);
         List<Messages> result = messagesService.list(queryWrapper);
         ajaxJson.setData(result);
+        return ajaxJson;
+    }
+    @ApiOperation(value = "分页列表", notes = "分页列表")
+    @GetMapping("/page")
+    public AjaxJson page(Messages param){
+        AjaxJson ajaxJson = new AjaxJson();
+        IPage<Messages> page = new Page<>(param.getPageNum(), param.getPageSize());
+        IPage<Messages> page1 = messagesService.page(page, messagesService.createQueryWrapper(param));
+        // 主要演示这里可以加条件。在name不为空的时候执行
+        ajaxJson.setData(page1);
         return ajaxJson;
     }
 }

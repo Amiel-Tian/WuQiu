@@ -22,13 +22,17 @@ public class MessagesServiceImpl extends ServiceImpl<MessagesMapper, Messages> i
     @Override
     public LambdaQueryWrapper<Messages> createQueryWrapper(Messages param) {
         LambdaQueryWrapper<Messages> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(param.getSendId()) && StringUtils.isNotBlank(param.getReceiveId())) {
+
+        if (StringUtils.isNotBlank(param.getType()) && param.getType().equals("group") && StringUtils.isNotBlank(param.getSendId())){
+            queryWrapper.and(wrapper -> wrapper.eq(Messages::getSendId, param.getSendId()))
+                    .or(wrapper -> wrapper.eq(Messages::getReceiveId, param.getSendId()));
+        }else if (StringUtils.isNotBlank(param.getSendId()) && StringUtils.isNotBlank(param.getReceiveId())) {
             queryWrapper.and(wrapper -> wrapper.eq(Messages::getSendId, param.getSendId())
                             .eq(Messages::getReceiveId, param.getReceiveId()))
                     .or(wrapper -> wrapper.eq(Messages::getSendId, param.getReceiveId())
                             .eq(Messages::getReceiveId, param.getSendId()));
         }
-        queryWrapper.orderByAsc(Messages::getSendDate);
+        queryWrapper.orderByDesc(Messages::getSendDate);
         return queryWrapper;
     }
 }
