@@ -32,6 +32,12 @@ public enum StatusCode {
     EXCEPTION_SYSTEM("500", "系统异常"),
     EXCEPTION_UNKNOWN("501", "未知异常,请联系管理员"),
 
+    /**
+     * 通信标识
+    * */
+    MESSAGE_WEBSOCKET("10001", "websocketMessage"),
+    MESSAGE_MES("10002", "message"),
+
     ;
 
     public String statusCode;
