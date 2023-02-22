@@ -173,13 +173,15 @@ public class NetgateHandler extends TextWebSocketHandler {
      */
     public void sendMessageToUsers(ArrayList<String> userIds, TextMessage message) {
         for (ConcurrentHashMap<String, WebSocketSession> netgate : netgates.values()){
-            for (WebSocketSession ws : netgate.values()) {
-                if (ws != null && userIds.indexOf(ws.getId()) > -1){
-                    try {
-                        this.handleTextMessage(ws, message);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            for (String userId : userIds) {
+                WebSocketSession ws = netgate.get(userId);
+                if(ws == null){
+                    return;
+                }
+                try {
+                    this.handleTextMessage(ws, message);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
