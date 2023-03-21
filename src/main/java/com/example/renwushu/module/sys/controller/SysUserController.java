@@ -4,6 +4,7 @@ package com.example.renwushu.module.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.renwushu.common.QueryField;
 import com.example.renwushu.common.json.AjaxJson;
 import com.example.renwushu.common.json.StatusCode;
 import com.example.renwushu.module.sys.entity.SysUser;
@@ -58,6 +59,12 @@ public class SysUserController {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         if (StringUtils.isNotBlank(param.getPassword())) {
             param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        }
+        if (StringUtils.isBlank(param.getId())) {
+            param.setId(IdHelp.UUID());
+        }
+        if (param.getStatus() == null) {
+            param.setStatus(QueryField.STATU_NOR_);
         }
         otherUpdate(param);
 
