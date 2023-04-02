@@ -36,6 +36,6 @@
                      ORDER BY send_date DESC
                  ) T
             WHERE lastIndexCreated = 1
-        ) b ON a.id = b.id AND users LIKE CONCAT('%',#{id},'%'))
+        ) b ON a.id = b.id AND users LIKE CONCAT('%',#{id},'%')
     </select>
 </mapper>
