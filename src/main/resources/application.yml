@@ -2,6 +2,8 @@ server:
   port: 2200
   servlet:
     context-path: /renwushu
+  tomcat:
+    max-http-form-post-size: -1
 
 #mysql数据库配置 ?serverTimezone=GMT%2B8
 spring:

@@ -44,7 +44,20 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
         List<SysMenu> sysMenus = this.listByIds(menuIds);
 
-        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).collect(Collectors.toList());
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.equals("PC")).collect(Collectors.toList());
+
+        List<SysMenu> menus = buildTreeMenu(collect);
+        return convert(menus);
+    }
+    @Override
+    public List<SysMenuDto> getcurrentUserNavApp() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SysUser sysUser = sysUserService.getByUser(new SysUser().setLoginname(username));
+        // 获取用户的所有菜单
+        List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
+        List<SysMenu> sysMenus = this.listByIds(menuIds);
+
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.equals("APP")).collect(Collectors.toList());
 
         List<SysMenu> menus = buildTreeMenu(collect);
         return convert(menus);

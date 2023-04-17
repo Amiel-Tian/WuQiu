@@ -54,6 +54,19 @@ public class SysMenuController {
         String[] authoritys = StringUtils.tokenizeToStringArray(sysUserService.getAuthorityByUser(sysUser.getId()), ",");
         return new AjaxJson().setData(MapUtil.builder().put("nav", sysMenuService.getcurrentUserNav()).put("authoritys", authoritys).map());
     }
+    /**
+     * 获取当前用户的菜单栏以及权限
+     */
+    @GetMapping("/navApp")
+    @ResponseBody
+    public AjaxJson navApp() {
+        SysUser sysUser = sysUserService.getLoginUser();
+        if (sysUser == null){
+            return new AjaxJson().setData(MapUtil.builder().put("nav", new ArrayList<>()).put("authoritys", new ArrayList<>()).map());
+        }
+        String[] authoritys = StringUtils.tokenizeToStringArray(sysUserService.getAuthorityByUser(sysUser.getId()), ",");
+        return new AjaxJson().setData(MapUtil.builder().put("nav", sysMenuService.getcurrentUserNavApp()).put("authoritys", authoritys).map());
+    }
     @GetMapping("/navAll")
     @ResponseBody
     public AjaxJson navAll() {

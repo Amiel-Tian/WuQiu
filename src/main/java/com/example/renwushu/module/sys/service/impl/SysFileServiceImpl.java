@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         uploadResponse = minioUtil.uploadFile(file, minioProperties.getBucketName(), false);
         SysFile sysFile = saveFile(uploadResponse);
         sysFile.setTemporary("1");
+        sysFile.setCreateDate(new Date());
 
         save(sysFile);
         uploadResponse.setId(sysFile.getId());
@@ -54,6 +56,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         uploadResponse = minioUtil.uploadFile(file, minioProperties.getBucketName(), true);
         SysFile sysFile = saveFile(uploadResponse);
         sysFile.setTemporary("0");
+        sysFile.setCreateDate(new Date());
 
         save(sysFile);
         uploadResponse.setId(sysFile.getId());
@@ -68,6 +71,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         sysFile.setFileSize(uploadResponse.getSize());
         sysFile.setFileExt(uploadResponse.getFileExt());
         sysFile.setFileLink(uploadResponse.getLink());
+        sysFile.setCreateDate(new Date());
 
         return sysFile;
     }
