@@ -44,7 +44,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
         List<SysMenu> sysMenus = this.listByIds(menuIds);
 
-        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.equals("PC")).collect(Collectors.toList());
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.getDevice().equals("PC")).collect(Collectors.toList());
 
         List<SysMenu> menus = buildTreeMenu(collect);
         return convert(menus);
@@ -57,7 +57,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         List<String> menuIds = sysUserMapper.getNavMenuIds(sysUser.getId());
         List<SysMenu> sysMenus = this.listByIds(menuIds);
 
-        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.equals("APP")).collect(Collectors.toList());
+        List<SysMenu> collect = sysMenus.stream().sorted(Comparator.comparing(SysMenu::getSort,Comparator.nullsLast(Integer::compareTo))).filter(f -> StringUtils.isBlank(f.getDevice()) || f.getDevice().equals("APP")).collect(Collectors.toList());
 
         List<SysMenu> menus = buildTreeMenu(collect);
         return convert(menus);
