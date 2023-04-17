@@ -22,4 +22,6 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenuDto> getNavAll();
 
     LambdaQueryWrapper<SysMenu> createQueryWrapper(SysMenu param);
+
+    List<SysMenuDto> getcurrentUserNavApp();
 }
