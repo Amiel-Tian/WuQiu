@@ -40,5 +40,31 @@ public class ToolUtil {
         dateMap.put("end",sdf.format(end));
         return dateMap;
     }
+    /*根据生日获取年龄*/
+    public static  int getUserAge(Date birthDay) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date birthDayAge = sdf.parse(sdf.format(birthDay));
+        Calendar cal = Calendar.getInstance();
+        if (cal.before(birthDayAge)) { //出生日期晚于当前时间，无法计算
+            throw new IllegalArgumentException(
+                    "日期填写错误！！");
+        }
+        int yearNow = cal.get(Calendar.YEAR);  //当前年份
+        int monthNow = cal.get(Calendar.MONTH);  //当前月份
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH); //当前日期
+        cal.setTime(birthDayAge);
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;   //计算整岁数
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) {
+                    age--;//当前日期在生日之前，年龄减一
+                }
+            }else{
+                age--;//当前月份在生日之前，年龄减一
+            } } return age;
+    }
 
 }
