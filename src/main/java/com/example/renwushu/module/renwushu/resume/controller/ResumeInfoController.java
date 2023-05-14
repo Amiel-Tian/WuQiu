@@ -8,6 +8,7 @@ import com.example.renwushu.module.renwushu.resume.service.ResumeInfoService;
 import com.example.renwushu.module.sys.entity.SysUser;
 import com.example.renwushu.module.sys.service.SysUserService;
 import com.example.renwushu.utils.IdHelp;
+import com.example.renwushu.utils.ToolUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +50,16 @@ public class ResumeInfoController {
         param.setCreateBy(loginUser.getId());
         param.setId(IdHelp.UUID());
         param.setCreateDate(new Date());
+        Date birthday = param.getBirthday();
+        if (birthday != null){
+            try {
+                int userAge = ToolUtil.getUserAge(birthday);
+                param.setAge(String.valueOf(userAge));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
         boolean result = resumeInfoService.save(param);
         if (result) {
             Map map = new HashMap();
@@ -64,6 +75,16 @@ public class ResumeInfoController {
     public AjaxJson update(@RequestBody ResumeInfo param) {
         AjaxJson ajaxJson = new AjaxJson();
         param.setUpdateDate(new Date());
+        Date birthday = param.getBirthday();
+        if (birthday != null){
+            try {
+                int userAge = ToolUtil.getUserAge(birthday);
+                param.setAge(String.valueOf(userAge));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
         boolean result = resumeInfoService.updateById(param);
         ajaxJson.setData(result);
         return ajaxJson;
