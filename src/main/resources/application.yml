@@ -1,7 +1,7 @@
 server:
-  port: 2201
+  port: 2200
   servlet:
-    context-path: /chat
+    context-path: /renwushu
   tomcat:
     max-http-form-post-size: -1
 
