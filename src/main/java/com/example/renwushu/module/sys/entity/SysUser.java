@@ -87,4 +87,10 @@ public class SysUser  extends BaseEntity implements Serializable{
     @TableField(exist = false)
     private String passwordVer;
 
+    @ApiModelProperty("类型")
+    private String type;
+
+    @ApiModelProperty("群人员")
+    private String users;
+
 }

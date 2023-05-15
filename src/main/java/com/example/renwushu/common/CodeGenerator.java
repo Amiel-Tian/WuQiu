@@ -14,7 +14,7 @@ public class CodeGenerator {
     public void run() {
         // 数据库连接url
 //        String url = "jdbc:mysql://60.205.4.143:3306/mn_look_house?serverTimezone=GMT%2B8";
-        String url = "jdbc:mysql://127.0.0.1:3306/wq_renwushu?serverTimezone=GMT%2B8";
+        String url = "jdbc:mysql://127.0.0.1:3306/wq_chat?serverTimezone=GMT%2B8";
         // 数据库用户名和密码
         String username = "root";
 //        String password = "amiel@3294";
@@ -25,7 +25,7 @@ public class CodeGenerator {
         String xmlPath = System.getProperty("user.dir") + "/gen/src/main/resources/mapper";
         // 需要生成的数据表
         String[] tableArr = new String[]{
-                "sys_websocket",
+                "n_messages",
         };
 
         FastAutoGenerator.create(url, username, password)
@@ -38,7 +38,7 @@ public class CodeGenerator {
                             .outputDir(moudlePath); // 指定输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com.example.renwushu.module.sys") // 设置模块名
+                    builder.parent("com.example.renwushu.module.chat.messages") // 设置模块名
                             .mapper("dao") // 设置mapper包名
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml, xmlPath)); // 设置xml文件生成目录
                 })
